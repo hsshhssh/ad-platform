@@ -72,7 +72,7 @@ public class ReYunAdService extends LeagueAbstractService
 
         params.put("mac", adClick.getMac());
         params.put("ip", adClick.getIp());
-        params.put("callback", URLEncoder.encode(configUtils.getHost().trim() + "?clickId=" + adClick.getId(), "UTF-8"));
+        params.put("callback", URLEncoder.encode(configUtils.getHost().trim() + "/xqh/ad/reyun/callback?clickId=" + adClick.getId(), "UTF-8"));
 
         List<String> paramList = Lists.newArrayList();
         for (String s : params.keySet())

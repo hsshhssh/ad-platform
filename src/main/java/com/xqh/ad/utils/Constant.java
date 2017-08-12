@@ -32,7 +32,7 @@ public class Constant
     /**
      * 系统繁忙
      */
-    public final static String ERROR_SYS = "0005";
+    public final static String ERROR_SYS = "1000";
     /////////////////////////////////////////////////////////////////////////
 
     /**
