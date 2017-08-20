@@ -14,5 +14,8 @@ public class ConfigUtils
     @Value(path = "/config/zkconf/ad", key = "host")
     private String host;
 
+    @Value(path = "/config/zkconf/ad", key = "tencentCallback")
+    private String tencentCallback;
+
 
 }
