@@ -16,12 +16,13 @@
     <result column="ip" property="ip" jdbcType="CHAR" />
     <result column="android_id" property="androidId" jdbcType="CHAR" />
     <result column="idfa" property="idfa" jdbcType="CHAR" />
+    <result column="callback_url" property="callbackUrl" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="INTEGER" />
     <result column="update_time" property="updateTime" jdbcType="INTEGER" />
   </resultMap>
 
   <select id="selectByPrimaryKeyLock" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-    select id,app_media_id,app_id,media_id,league_id,phone_type,imei,mac,ip,android_id,idfa,create_time,update_time FROM ad_click where id=#{id} FOR UPDATE
+    select id,app_media_id,app_id,media_id,league_id,phone_type,imei,mac,ip,android_id,idfa,callback_url,create_time,update_time FROM ad_click where id=#{id} FOR UPDATE
   </select>
 
 </mapper>

@@ -23,7 +23,7 @@ public class AsyncUtils
     @Async
     public void callbackUser(String callback)
     {
-        logger.info("异步回调开始 callback:{}");
+        logger.info("异步回调开始 callback:{}", callback);
         String url = null;
         try
         {
