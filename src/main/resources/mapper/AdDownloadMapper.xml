@@ -17,6 +17,7 @@
     <result column="ip" property="ip" jdbcType="CHAR" />
     <result column="android_id" property="androidId" jdbcType="CHAR" />
     <result column="idfa" property="idfa" jdbcType="CHAR" />
+    <result column="is_skip" property="isSkip" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="INTEGER" />
     <result column="update_time" property="updateTime" jdbcType="INTEGER" />
   </resultMap>

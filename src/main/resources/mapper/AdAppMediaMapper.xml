@@ -9,7 +9,11 @@
     <result column="app_id" property="appId" jdbcType="INTEGER" />
     <result column="media_id" property="mediaId" jdbcType="INTEGER" />
     <result column="media_code" property="mediaCode" jdbcType="CHAR" />
+    <result column="url_code" property="urlCode" jdbcType="VARCHAR" />
     <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="app_key" property="appKey" jdbcType="VARCHAR" />
+    <result column="start_count" property="startCount" jdbcType="INTEGER" />
+    <result column="discount_rate" property="discountRate" jdbcType="DECIMAL" />
     <result column="create_time" property="createTime" jdbcType="INTEGER" />
     <result column="update_time" property="updateTime" jdbcType="INTEGER" />
   </resultMap>

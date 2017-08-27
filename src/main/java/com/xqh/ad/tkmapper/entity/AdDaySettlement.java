@@ -5,14 +5,20 @@ import lombok.Data;
 import javax.persistence.*;
 
 @Data
-@Table(name = "ad_app_media")
-public class AdAppMedia {
+@Table(name = "ad_day_settlement")
+public class AdDaySettlement {
     /**
      * 主键id
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    /**
+     * 推广应用-媒体表主键
+     */
+    @Column(name = "app_media_id")
+    private Integer appMediaId;
 
     /**
      * 推广应用id
@@ -27,39 +33,22 @@ public class AdAppMedia {
     private Integer mediaId;
 
     /**
-     * 媒体编码
+     * 结算日期
      */
-    @Column(name = "media_code")
-    private String mediaCode;
+    @Column(name = "settlement_time")
+    private Integer settlementTime;
 
     /**
-     * url唯一标识
+     * 点击量
      */
-    @Column(name = "url_code")
-    private String urlCode;
+    @Column(name = "click_count")
+    private Integer clickCount;
 
     /**
-     * 推广url
+     * 下载量
      */
-    private String url;
-
-    /**
-     * 秘钥
-     */
-    @Column(name = "app_key")
-    private String appKey;
-
-    /**
-     * 扣量起始值
-     */
-    @Column(name = "start_count")
-    private Integer startCount;
-
-    /**
-     * 扣量比例
-     */
-    @Column(name = "discount_rate")
-    private Double discountRate;
+    @Column(name = "download_count")
+    private Integer downloadCount;
 
     /**
      * 创建时间

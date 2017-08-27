@@ -1,21 +1,25 @@
 package com.xqh.ad.service;
 
-import com.xqh.ad.entity.other.HttpResult;
 import com.xqh.ad.exception.NoLeagueChannelException;
 import com.xqh.ad.service.league.LeagueAbstractService;
 import com.xqh.ad.service.league.ReYunAdService;
 import com.xqh.ad.service.league.TencentAdService;
 import com.xqh.ad.service.league.YouMengAdService;
+import com.xqh.ad.tkmapper.entity.AdAppMedia;
+import com.xqh.ad.tkmapper.entity.AdClick;
+import com.xqh.ad.tkmapper.entity.AdDownload;
+import com.xqh.ad.tkmapper.mapper.AdAppMediaMapper;
+import com.xqh.ad.tkmapper.mapper.AdClickMapper;
+import com.xqh.ad.tkmapper.mapper.AdDownloadMapper;
+import com.xqh.ad.utils.AsyncUtils;
 import com.xqh.ad.utils.Constant;
-import com.xqh.ad.utils.HttpUtils;
+import com.xqh.ad.utils.common.DozerUtils;
+import com.xqh.ad.utils.common.ExampleBuilder;
+import com.xqh.ad.utils.common.Search;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 
 /**
  * Created by hssh on 2017/8/12.
@@ -34,6 +38,17 @@ public class XQHAdService
     @Autowired
     private YouMengAdService youMengAdService;
 
+    @Autowired
+    private AdClickMapper adClickMapper;
+
+    @Autowired
+    private AdDownloadMapper adDownloadMapper;
+
+    @Autowired
+    private AsyncUtils asyncUtils;
+
+    @Autowired
+    private AdAppMediaMapper adAppMediaMapper;
 
     /**
      * 根据联盟编码选择Service
@@ -63,30 +78,100 @@ public class XQHAdService
 
     }
 
+
     /**
-     * 回调
+     * 回调处理
+     * @param clickId
      */
-    @Async
-    public void callbackUser(String callback)
+    public void callback(int clickId)
     {
-        logger.info("异步回调开始 callback:{}");
-        String url = null;
-        try
+        AdClick adClick = adClickMapper.selectByPrimaryKeyLock(clickId);
+
+        if(null == adClick)
         {
-            url = URLDecoder.decode(callback, "UTF-8");
-        }
-        catch (UnsupportedEncodingException e)
-        {
-            logger.error("异步回到异常 callback:{}", callback);
+            logger.error("广告平台回调异常 clickId{}不合法 ", clickId);
             return ;
         }
 
-        logger.info("异步回调url:{}", url);
+        // TODO 计算扣量
+        boolean isSkip = isSkipDownLoad(adClick);
 
-        HttpResult httpResult = HttpUtils.get(url);
+        logger.info("扣量结果 isSkip:{}", isSkip);
 
-        logger.info("异步回调结果 httpResult:{}", httpResult);
+        // 插入下载记录
+        int nowTime = (int) (System.currentTimeMillis()/1000);
+        AdDownload adDownload = DozerUtils.map(adClick, AdDownload.class);
+        adDownload.setIsSkip(isSkip ? 1 : 0);
+        adDownload.setId(null);
+        adDownload.setClickId(adClick.getId());
+        adDownload.setCreateTime(nowTime);
+        adDownload.setUpdateTime(nowTime);
+
+        adDownloadMapper.insertSelective(adDownload);
+
+        logger.info("广告平台 异步回调开始 clickId:{}", clickId);
+
+        if(!isSkip)
+        {
+            logger.info("不扣量 回调下游 clickId:{}", clickId);
+            asyncUtils.callbackUser(adClick.getCallbackUrl());
+        }
+        else
+        {
+            logger.info("扣量 不回调下游 clickId:{}", clickId);
+        }
 
     }
+
+
+    /**
+     * 判断是否需要扣量
+     * @param adClick
+     * @return
+     */
+    public boolean isSkipDownLoad(AdClick adClick)
+    {
+        logger.info("判断是否需要扣量开始 clickId:{}", adClick.getId());
+
+        AdAppMedia adAppMedia = adAppMediaMapper.selectByPrimaryKey(adClick.getAppMediaId());
+
+        if(null == adAppMedia)
+        {
+            logger.error("计算扣量失败 正常回调 appMediaId异常 clickId:{} appMediaId:{}", adClick.getId(), adClick.getAppMediaId());
+            return false;
+        }
+
+        // 计算该应用当前下载量
+        Search search = new Search();
+        search.put("appMediaId_eq", adClick.getAppMediaId());
+        int curDownloadCount = adDownloadMapper.selectCountByExample(new ExampleBuilder(AdDownload.class).search(search).build());
+        
+        logger.info("clickId:{} appMediaId:{} 当前下载量:{} 扣量初始值:{} 扣量率:{}", adClick.getId(), adClick.getAppMediaId(), curDownloadCount, adAppMedia.getStartCount(), adAppMedia.getDiscountRate());
+        
+        if(curDownloadCount < adAppMedia.getStartCount())
+        {
+            logger.info("clickId:{} appMediaId:{} 当前下载量小于初始值 不扣量", adClick.getId(),  adClick.getAppMediaId());
+            return  false;
+        }
+
+
+        // 取得差额的个位数
+        int diff = curDownloadCount - adAppMedia.getStartCount() + 1;
+        int unit = diff % 10;
+
+        if(unit >= (adAppMedia.getDiscountRate() * 10))
+        {
+            logger.info("clickId:{} appMediaId:{} 扣量", adClick.getId(), adClick.getAppMediaId());
+            return true;
+        }
+        else
+        {
+            logger.info("clickId:{} appMediaId:{} 不扣量", adClick.getId(), adClick.getAppMediaId());
+            return false;
+        }
+
+
+    }
+
 
 }

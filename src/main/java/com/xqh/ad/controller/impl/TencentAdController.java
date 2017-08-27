@@ -3,12 +3,9 @@ package com.xqh.ad.controller.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.xqh.ad.controller.api.ITencentAdController;
 import com.xqh.ad.service.XQHAdService;
-import com.xqh.ad.tkmapper.entity.AdClick;
-import com.xqh.ad.tkmapper.entity.AdDownload;
 import com.xqh.ad.tkmapper.mapper.AdClickMapper;
 import com.xqh.ad.tkmapper.mapper.AdDownloadMapper;
 import com.xqh.ad.utils.CommonUtils;
-import com.xqh.ad.utils.common.DozerUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,26 +49,28 @@ public class TencentAdController implements ITencentAdController
             return ;
         }
 
-        AdClick adClick = adClickMapper.selectByPrimaryKey(Integer.valueOf(schId));
+        xqhAdService.callback(Integer.valueOf(schId));
 
-        if(null == adClick)
-        {
-            logger.error("腾讯回调异常 schId{}不合法 ", schId);
-            return ;
-        }
-
-        // 插入下载记录
-        int nowTime = (int) (System.currentTimeMillis()/1000);
-        AdDownload adDownload = DozerUtils.map(adClick, AdDownload.class);
-        adDownload.setId(null);
-        adDownload.setClickId(adClick.getId());
-        adDownload.setCreateTime(nowTime);
-        adDownload.setUpdateTime(nowTime);
-
-        adDownloadMapper.insertSelective(adDownload);
-
-        logger.info("腾讯回调开始 schId:{}", schId);
-
-        xqhAdService.callbackUser(adClick.getCallbackUrl());
+        //AdClick adClick = adClickMapper.selectByPrimaryKey(Integer.valueOf(schId));
+        //
+        //if(null == adClick)
+        //{
+        //    logger.error("腾讯回调异常 schId{}不合法 ", schId);
+        //    return ;
+        //}
+        //
+        //// 插入下载记录
+        //int nowTime = (int) (System.currentTimeMillis()/1000);
+        //AdDownload adDownload = DozerUtils.map(adClick, AdDownload.class);
+        //adDownload.setId(null);
+        //adDownload.setClickId(adClick.getId());
+        //adDownload.setCreateTime(nowTime);
+        //adDownload.setUpdateTime(nowTime);
+        //
+        //adDownloadMapper.insertSelective(adDownload);
+        //
+        //logger.info("腾讯回调开始 schId:{}", schId);
+        //
+        //xqhAdService.callbackUser(adClick.getCallbackUrl());
     }
 }

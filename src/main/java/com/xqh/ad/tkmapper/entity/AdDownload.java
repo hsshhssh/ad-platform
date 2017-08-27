@@ -77,6 +77,12 @@ public class AdDownload {
     private String idfa;
 
     /**
+     * 是否扣量
+     */
+    @Column(name = "is_skip")
+    private Integer isSkip;
+
+    /**
      * 创建时间
      */
     @Column(name = "create_time")

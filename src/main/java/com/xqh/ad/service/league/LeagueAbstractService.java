@@ -1,24 +1,18 @@
 package com.xqh.ad.service.league;
 
-import com.sun.tools.doclets.formats.html.AllClassesFrameWriter;
-import com.xqh.ad.entity.other.HttpResult;
 import com.xqh.ad.exception.RequestParamException;
 import com.xqh.ad.tkmapper.entity.AdApp;
 import com.xqh.ad.tkmapper.entity.AdAppMedia;
 import com.xqh.ad.tkmapper.entity.AdClick;
 import com.xqh.ad.tkmapper.mapper.AdClickMapper;
 import com.xqh.ad.utils.Constant;
-import com.xqh.ad.utils.HttpUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 
 /**
  * Created by hssh on 2017/8/12.
