@@ -109,7 +109,7 @@ public class TencentAdService extends LeagueAbstractService
         }
 
         params.put("cip", adClick.getIp());
-        params.put("callback", URLEncoder.encode(configUtils.getTencentCallback().trim() + "/xqh/ad/tencent/callback?clickId=" + adClick.getId(), "UTF-8"));
+        params.put("callback", URLEncoder.encode(configUtils.getTencentCallback().trim() + "/xqh/ad/tencent/callback", "UTF-8"));
         params.put("time", String.valueOf(System.currentTimeMillis()/1000));
         params.put("scid", String.valueOf(adClick.getId()));
         params.put("tagid", adApp.getName());
