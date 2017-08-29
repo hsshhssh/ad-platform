@@ -109,7 +109,22 @@ public class TencentAdService extends LeagueAbstractService
         }
 
         params.put("cip", adClick.getIp());
-        params.put("callback", URLEncoder.encode(configUtils.getTencentCallback().trim() + "/xqh/ad/tencent/callback", "UTF-8"));
+
+        if("0".equals(configUtils.getTencentCallbackParamSwitch()))
+        {
+            String url = configUtils.getTencentCallback().trim() + "/xqh/ad/tencent/callback";
+            logger.info("腾讯回调 不带参数 callbackUrl:{}", url);
+            params.put("callback", URLEncoder.encode(url, "UTF-8"));
+        }
+        else
+        {
+            String url = configUtils.getTencentCallback().trim() + "/xqh/ad/tencent/callback?scid=" + adClick.getId();
+            logger.info("腾讯回调 待参数 callbackUrl:{}", url);
+            params.put("callback", URLEncoder.encode(url, "UTF-8"));
+
+        }
+
+
         params.put("time", String.valueOf(System.currentTimeMillis()/1000));
         params.put("scid", String.valueOf(adClick.getId()));
         params.put("tagid", adApp.getName());

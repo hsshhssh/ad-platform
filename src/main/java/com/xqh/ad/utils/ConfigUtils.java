@@ -17,5 +17,10 @@ public class ConfigUtils
     @Value(path = "/config/zkconf/ad", key = "tencentCallback")
     private String tencentCallback;
 
+    /**
+     * 0不带参数回调 否则待参数回调
+     */
+    @Value(path = "/config/zkconf/ad", key = "tencentCallbackParamSwitch")
+    private String tencentCallbackParamSwitch;
 
 }

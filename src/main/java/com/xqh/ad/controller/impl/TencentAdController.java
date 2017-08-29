@@ -41,7 +41,7 @@ public class TencentAdController implements ITencentAdController
         TreeMap<String, String> params = CommonUtils.getParams(req);
         logger.info("腾讯 callback params:{}", JSONObject.toJSON(params));
 
-        String schId = req.getParameter("sch_id");
+        String schId = req.getParameter("scid");
 
         if(!StringUtils.isNumeric(schId))
         {
