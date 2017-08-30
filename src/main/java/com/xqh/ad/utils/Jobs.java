@@ -20,6 +20,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -52,8 +53,11 @@ public class Jobs
 
         Map<Integer, Integer> downloadMap = getDownloadMap(CommonUtils.getZeroHourTime(-1), CommonUtils.getZeroHourTime(0));
 
+        Map<Integer, Integer> callbackDownloadMap = getCallbackDownloadMap(CommonUtils.getZeroHourTime(-1), CommonUtils.getZeroHourTime(0));
+
         int settlementTime = CommonUtils.getZeroHourTime(0);
         int nowTime = (int) (System.currentTimeMillis()/1000);
+
 
         for (Integer appMediaId : clickMap.keySet())
         {
@@ -67,6 +71,7 @@ public class Jobs
             settlement.setSettlementTime(settlementTime);
             settlement.setClickCount(clickMap.get(appMediaId) == null ? 0 : clickMap.get(appMediaId));
             settlement.setDownloadCount(downloadMap.get(appMediaId) == null ? 0 : downloadMap.get(appMediaId));
+            settlement.setCallbackDownloadCount(callbackDownloadMap.get(appMediaId) == null ? 0 : callbackDownloadMap.get(appMediaId));
             settlement.setCreateTime(nowTime);
             settlement.setUpdateTime(nowTime);
 
@@ -81,7 +86,7 @@ public class Jobs
         search.put("createTime_gte", startTime);
         search.put("createTime_lt", endTime);
 
-        Example example = new ExampleBuilder(AdClick.class).search(search).build();
+        Example example = new ExampleBuilder(AdClick.class).search(search).fields(Arrays.asList("appMediaId","id")).build();
 
         List<AdClick> adClickList = adClickMapper.selectByExample(example);
 
@@ -108,6 +113,36 @@ public class Jobs
         Search search = new Search();
         search.put("createTime_gte", startTime);
         search.put("createTime_lt", endTime);
+
+        Example example = new ExampleBuilder(AdDownload.class).search(search).build();
+
+        List<AdDownload> adDownloadList = adDownloadMapper.selectByExample(example);
+
+        Multimap<Integer, AdDownload> downloadMultimap = ArrayListMultimap.create();
+
+        for (AdDownload adDownload : adDownloadList)
+        {
+            downloadMultimap.put(adDownload.getAppMediaId(), adDownload);
+        }
+
+        Map<Integer, Integer> downLoadMap = Maps.newHashMap();
+
+        for (Integer appMediaId : downloadMultimap.keySet())
+        {
+            downLoadMap.put(appMediaId, downloadMultimap.get(appMediaId).size());
+        }
+
+        return downLoadMap;
+
+    }
+
+
+    public Map<Integer, Integer> getCallbackDownloadMap(int startTime, int endTime)
+    {
+        Search search = new Search();
+        search.put("createTime_gte", startTime);
+        search.put("createTime_lt", endTime);
+        search.put("isSkip_eq", 0);
 
         Example example = new ExampleBuilder(AdDownload.class).search(search).build();
 

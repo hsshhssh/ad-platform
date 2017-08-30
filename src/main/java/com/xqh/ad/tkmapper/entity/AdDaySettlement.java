@@ -51,6 +51,12 @@ public class AdDaySettlement {
     private Integer downloadCount;
 
     /**
+     * 回调下游的下载量
+     */
+    @Column(name = "callback_download_count")
+    private Integer callbackDownloadCount;
+
+    /**
      * 创建时间
      */
     @Column(name = "create_time")

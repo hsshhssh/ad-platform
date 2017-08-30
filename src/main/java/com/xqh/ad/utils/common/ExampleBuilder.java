@@ -48,6 +48,12 @@ public class ExampleBuilder {
         return this;
     }
 
+    public ExampleBuilder fields(List<String> fields)
+    {
+        this.fields = new Fields(fields);
+        return this;
+    }
+
     public ExampleBuilder sort(Sort sort) {
         this.sort = sort;
         return this;
