@@ -28,6 +28,11 @@ public class Constant
      */
     public final static String ERROR_PARAM = "0004";
 
+    /**
+     * urlCode 黑名单
+     */
+    public final static String BLACK_LIST = "0005";
+
 
     /**
      * 系统繁忙

@@ -23,4 +23,7 @@ public class ConfigUtils
     @Value(path = "/config/zkconf/ad", key = "tencentCallbackParamSwitch")
     private String tencentCallbackParamSwitch;
 
+    @Value(path = "/config/zkconf/ad", key = "urlCodeBlackList")
+    private String urlCodeBlackList;
+
 }

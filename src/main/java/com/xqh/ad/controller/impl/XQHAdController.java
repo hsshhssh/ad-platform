@@ -12,6 +12,7 @@ import com.xqh.ad.tkmapper.entity.AdAppMedia;
 import com.xqh.ad.tkmapper.entity.AdClick;
 import com.xqh.ad.tkmapper.mapper.AdAppMapper;
 import com.xqh.ad.utils.CommonUtils;
+import com.xqh.ad.utils.ConfigUtils;
 import com.xqh.ad.utils.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,10 +40,20 @@ public class XQHAdController implements IXQHAdController
     @Autowired
     private XQHAdService xqhAdService;
 
+    @Autowired
+    private ConfigUtils configUtils;
+
     @Override
     @Transactional
     public void url(HttpServletRequest req, HttpServletResponse resp, String urlCode)
     {
+        // 判断是否在黑名单内
+        if(configUtils.getUrlCodeBlackList().contains(urlCode))
+        {
+            logger.error("urlCode:{} 黑名单", urlCode);
+            CommonUtils.writeResponse(resp, Constant.BLACK_LIST);
+            return ;
+        }
 
         AdAppMedia adAppMedia = adAppMediaService.getByUrlCode(urlCode);
 
