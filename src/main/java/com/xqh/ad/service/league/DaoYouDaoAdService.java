@@ -69,7 +69,7 @@ public class DaoYouDaoAdService extends LeagueAbstractService
         }
 
         params.put("clickid", String.valueOf(adClick.getId()));
-        params.put("mac", adClick.getMac());
+        //params.put("mac", adClick.getMac());
 
         List<String> paramList = Lists.newArrayList();
         for (String s : params.keySet())
