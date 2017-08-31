@@ -50,6 +50,16 @@ public class Constant
      */
     public final static String YOUMENG ="0003";
 
+    /**
+     * 道有道
+     */
+    public final static String DAOYOUDAO = "0004";
+
+    /**
+     * 瑞狮
+     */
+    public final static String RUISHI = "0005";
+
 
     /////////////////////////////////////////////////////////////////////////
 

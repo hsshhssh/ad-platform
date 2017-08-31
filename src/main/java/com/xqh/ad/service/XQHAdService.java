@@ -1,10 +1,7 @@
 package com.xqh.ad.service;
 
 import com.xqh.ad.exception.NoLeagueChannelException;
-import com.xqh.ad.service.league.LeagueAbstractService;
-import com.xqh.ad.service.league.ReYunAdService;
-import com.xqh.ad.service.league.TencentAdService;
-import com.xqh.ad.service.league.YouMengAdService;
+import com.xqh.ad.service.league.*;
 import com.xqh.ad.tkmapper.entity.AdAppMedia;
 import com.xqh.ad.tkmapper.entity.AdClick;
 import com.xqh.ad.tkmapper.entity.AdDownload;
@@ -50,6 +47,12 @@ public class XQHAdService
     @Autowired
     private AdAppMediaMapper adAppMediaMapper;
 
+    @Autowired
+    private DaoYouDaoAdService daoYouDaoAdService;
+
+    @Autowired
+    private RuiShiAdService ruiShiAdService;
+
     /**
      * 根据联盟编码选择Service
      */
@@ -69,6 +72,16 @@ public class XQHAdService
         {
             logger.info("友盟通道");
             return youMengAdService;
+        }
+        else if(Constant.DAOYOUDAO.equals(leagueCode))
+        {
+            logger.info("道有道通道");
+            return daoYouDaoAdService;
+        }
+        else if(Constant.RUISHI.equals(leagueCode))
+        {
+            logger.info("瑞狮通道");
+            return ruiShiAdService;
         }
         else
         {
