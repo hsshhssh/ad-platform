@@ -13,7 +13,7 @@ public class AdApplicationTests {
 
 	public static void main(String[] args)
 	{
-		System.out.println(String.format("%05d%05d", 1, 2));
+		System.out.println(String.format("%05d%05d", 1, 22));
 
 
 		String url = "http://www.baidu.com";
