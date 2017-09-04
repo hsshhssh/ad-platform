@@ -16,6 +16,7 @@ import com.xqh.ad.utils.Constant;
 import com.xqh.ad.utils.HttpUtils;
 import com.xqh.ad.utils.common.ExampleBuilder;
 import com.xqh.ad.utils.common.Search;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,7 +134,10 @@ public class TencentAdService extends LeagueAbstractService
         List<String> paramList = Lists.newArrayList();
         for (String s : params.keySet())
         {
-            paramList.add(s.trim() + "=" + params.get(s).trim());
+            if(StringUtils.isNotBlank(params.get(s)))
+            {
+                paramList.add(s.trim() + "=" + params.get(s).trim());
+            }
         }
 
         String url = host + "?" + Joiner.on("&").join(paramList);

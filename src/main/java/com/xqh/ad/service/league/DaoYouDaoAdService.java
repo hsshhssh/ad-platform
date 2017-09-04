@@ -9,6 +9,7 @@ import com.xqh.ad.tkmapper.entity.AdClick;
 import com.xqh.ad.utils.CommonUtils;
 import com.xqh.ad.utils.Constant;
 import com.xqh.ad.utils.UrlUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -74,7 +75,10 @@ public class DaoYouDaoAdService extends LeagueAbstractService
         List<String> paramList = Lists.newArrayList();
         for (String s : params.keySet())
         {
-            paramList.add(s.trim() + "=" + params.get(s).trim());
+            if(StringUtils.isNotBlank(params.get(s)))
+            {
+                paramList.add(s.trim() + "=" + params.get(s).trim());
+            }
         }
 
         return host + "?" + Joiner.on("&").join(paramList);

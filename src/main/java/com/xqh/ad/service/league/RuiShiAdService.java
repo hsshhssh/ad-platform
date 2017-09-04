@@ -84,7 +84,10 @@ public class RuiShiAdService extends LeagueAbstractService
         List<String> paramList = Lists.newArrayList();
         for (String s : params.keySet())
         {
-            paramList.add(s.trim() + "=" + params.get(s).trim());
+            if(StringUtils.isNotBlank(params.get(s)))
+            {
+                paramList.add(s.trim() + "=" + params.get(s).trim());
+            }
         }
 
         return host + "?" + Joiner.on("&").join(paramList);
