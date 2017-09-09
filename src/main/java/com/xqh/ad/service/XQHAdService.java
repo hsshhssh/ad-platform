@@ -116,7 +116,7 @@ public class XQHAdService
         AdDownload adDownload = DozerUtils.map(adClick, AdDownload.class);
         adDownload.setIsSkip(isSkip ? 1 : 0);
         adDownload.setId(null);
-        adDownload.setClickId(adClick.getId());
+        //adDownload.setClickId(adClick.getId());
         adDownload.setCreateTime(nowTime);
         adDownload.setUpdateTime(nowTime);
 

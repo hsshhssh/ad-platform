@@ -12,7 +12,7 @@ public class AdClick {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String id;
 
     /**
      * 推广应用-媒体主键
