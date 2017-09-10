@@ -23,9 +23,9 @@ public class AdAppMediaService
     /**
      * 生成推广url编码
      */
-    private String getUrlCode(int appId, int mediaId)
+    public String getUrlCode(int appId, int mediaId)
     {
-        return String.format("%05d05d", appId, mediaId);
+        return String.format("%05d%05d", appId, mediaId);
     }
 
     /**
