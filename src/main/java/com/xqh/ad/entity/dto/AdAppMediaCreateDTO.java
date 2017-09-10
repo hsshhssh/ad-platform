@@ -18,10 +18,6 @@ public class AdAppMediaCreateDTO
     @NotNull @Min(1)
     private Integer mediaId;
 
-    private Integer startCount;
-
-    private Double discountRate;
-
     @NotBlank
     private String appKey;
 

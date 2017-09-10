@@ -15,10 +15,6 @@ public class AdAppMediaUpdateDTO
     @NotNull @Min(1)
     private Integer id;
 
-    private Integer startCount;
-
-    private Double discountRate;
-
     @NotBlank
     private String appKey;
 
