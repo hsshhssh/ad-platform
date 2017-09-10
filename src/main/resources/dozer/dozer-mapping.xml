@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+    <mapping>
+        <class-a>com.xqh.ad.tkmapper.entity.AdAppMedia</class-a>
+        <class-b>com.xqh.ad.entity.vo.AdAppMediaVO</class-b>
+        <field>
+            <a>appId</a>
+            <b>appId</b>
+        </field>
+        <field custom-converter="com.xqh.ad.utils.converter.DozerAppIdToNameConverter">
+            <a>appId</a>
+            <b>appName</b>
+        </field>
+        <field>
+            <a>mediaId</a>
+            <b>mediaId</b>
+        </field>
+        <field custom-converter="com.xqh.ad.utils.converter.DozerMediaIdToNameConverter">
+            <a>mediaId</a>
+            <b>mediaName</b>
+        </field>
+    </mapping>
+
+    <mapping>
+        <class-a>com.xqh.ad.tkmapper.entity.AdApp</class-a>
+        <class-b>com.xqh.ad.entity.vo.AdAppVO</class-b>
+        <field>
+            <a>leagueId</a>
+            <b>leagueId</b>
+        </field>
+        <field custom-converter="com.xqh.ad.utils.converter.DozerLeagueIdToNameConverter">
+            <a>leagueId</a>
+            <b>leagueName</b>
+        </field>
+
+    </mapping>
+
+</mappings>

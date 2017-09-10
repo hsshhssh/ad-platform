@@ -1,11 +1,14 @@
 package com.xqh.ad.utils;
 
+import com.xqh.ad.exception.ErrorResponseEunm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -60,4 +63,54 @@ public class CommonUtils {
         Date date = calendar.getTime();
         return (int) (date.getTime()/1000);
     }
+
+    /**
+     * 返回错误信息
+     */
+    public static void sendError(HttpServletResponse resp, ErrorResponseEunm errorResponseEunm)
+    {
+        try
+        {
+            resp.sendError(errorResponseEunm.status, errorResponseEunm.msg);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * md5加密
+     * @param plainText
+     * @return
+     */
+    public static String getMd5(String plainText) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(plainText.getBytes());
+            byte b[] = md.digest();
+
+            int i;
+
+            StringBuffer buf = new StringBuffer("");
+            for (int offset = 0; offset < b.length; offset++) {
+                i = b[offset];
+                if (i < 0)
+                    i += 256;
+                if (i < 16)
+                    buf.append("0");
+                buf.append(Integer.toHexString(i));
+            }
+            //32位加密
+            return buf.toString();
+            // 16位的加密
+            //return buf.toString().substring(8, 24);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return "";
+        }
+
+    }
+
 }

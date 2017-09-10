@@ -1,4 +1,4 @@
-package com.xqh.ad;
+package com.xqh;
 
 import com.xqh.ad.utils.common.DozerUtils;
 import org.dozer.DozerBeanMapper;
@@ -14,9 +14,10 @@ import java.util.List;
 
 @SpringBootApplication
 @EnableAsync
-@MapperScan(basePackages = "com.xqh.ad.tkmapper.mapper")
+@MapperScan(basePackages = {"com.xqh.ad.tkmapper.mapper","com.xqh.account.tkmapper.mapper"})
 @EnableScheduling
-public class AdApplication {
+public class AdApplication
+{
 
 	public static void main(String[] args) {
 		SpringApplication.run(AdApplication.class, args);
@@ -25,7 +26,7 @@ public class AdApplication {
 	@Bean
 	public DozerBeanMapper dozerBean() {
 		List<String> mappingFiles = Arrays.asList(
-				//"dozer/dozer-mapping.xml"
+				"dozer/dozer-mapping.xml"
 		);
 
 		DozerBeanMapper dozerBean = new DozerBeanMapper();
