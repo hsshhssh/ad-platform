@@ -53,6 +53,12 @@ public class XQHAdService
     @Autowired
     private RuiShiAdService ruiShiAdService;
 
+    @Autowired
+    private CaulyAdService caulyAdService;
+
+    @Autowired
+    private VirtualAdService virtualAdService;
+
     /**
      * 根据联盟编码选择Service
      */
@@ -82,6 +88,16 @@ public class XQHAdService
         {
             logger.info("瑞狮通道");
             return ruiShiAdService;
+        }
+        else if(Constant.CAULY.equals(leagueCode))
+        {
+            logger.info("CAULY通道");
+            return caulyAdService;
+        }
+        else if(Constant.VIRTUAL.equals(leagueCode))
+        {
+            logger.info("虚拟通道");
+            return virtualAdService;
         }
         else
         {

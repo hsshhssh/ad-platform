@@ -1,6 +1,9 @@
 package com.xqh.ad.utils;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import com.xqh.ad.exception.ErrorResponseEunm;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,10 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Created by hssh on 2017/5/1.
@@ -47,6 +47,23 @@ public class CommonUtils {
             map.put(key.toString(),value);
         }
         return map;
+    }
+
+    /**
+     * 拼接url
+     */
+    public static String getFullUrl(String host, Map<String, String> params)
+    {
+        List<String> paramList = Lists.newArrayList();
+        for (String s : params.keySet())
+        {
+            if(StringUtils.isNotBlank(params.get(s)))
+            {
+                paramList.add(s.trim() + "=" + params.get(s).trim());
+            }
+        }
+
+        return host + "?" + Joiner.on("&").join(paramList);
     }
 
     /**

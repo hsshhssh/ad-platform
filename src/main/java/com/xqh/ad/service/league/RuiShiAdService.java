@@ -6,13 +6,19 @@ import com.google.common.collect.Lists;
 import com.xqh.ad.tkmapper.entity.AdApp;
 import com.xqh.ad.tkmapper.entity.AdAppMedia;
 import com.xqh.ad.tkmapper.entity.AdClick;
+import com.xqh.ad.tkmapper.entity.AdRuishiInfo;
+import com.xqh.ad.tkmapper.mapper.AdRuishiInfoMapper;
 import com.xqh.ad.utils.CommonUtils;
 import com.xqh.ad.utils.Constant;
 import com.xqh.ad.utils.UrlUtils;
+import com.xqh.ad.utils.common.ExampleBuilder;
+import com.xqh.ad.utils.common.Search;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,6 +33,9 @@ import java.util.Map;
 public class RuiShiAdService extends LeagueAbstractService
 {
     private static Logger logger = LoggerFactory.getLogger(RuiShiAdService.class);
+
+    @Autowired
+    private AdRuishiInfoMapper ruishiInfoMapper;
 
     @Override
     public void redirectUrl(HttpServletRequest req, HttpServletResponse resp, AdApp adApp, AdAppMedia adAppMedia, AdClick adClick)
@@ -78,7 +87,17 @@ public class RuiShiAdService extends LeagueAbstractService
         }
 
         //TODO q配置化
-        params.put("q", "221");
+        Search search = new Search();
+        search.put("appId_eq", adApp.getId());
+        Example example = new ExampleBuilder(AdRuishiInfo.class).search(search).build();
+        List<AdRuishiInfo> adRuishiInfos = ruishiInfoMapper.selectByExample(example);
+        if(adRuishiInfos.size() != 1)
+        {
+            logger.info("瑞狮推广 appId:{} 配置信息有误", adApp.getId());
+            return null;
+        }
+
+        params.put("q", adRuishiInfos.get(0).getRuishiQ());
         params.put("clickid", String.valueOf(adClick.getId()));
 
         List<String> paramList = Lists.newArrayList();

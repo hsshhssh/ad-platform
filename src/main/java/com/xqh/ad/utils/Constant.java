@@ -65,6 +65,15 @@ public class Constant
      */
     public final static String RUISHI = "0005";
 
+    /**
+     * Cauly
+     */
+    public final static String CAULY = "0006";
+
+    /**
+     * 虚拟联盟
+     */
+    public final static String VIRTUAL = "0007";
 
     /////////////////////////////////////////////////////////////////////////
 
