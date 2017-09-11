@@ -13,6 +13,7 @@ public enum ErrorResponseEunm
     INVALID_APPID_MEDIAID(40004, "无效appId或mediaId"),
     DUPLICATE_URLCODE(40005, "该应用和媒体已存在推广链接"),
     INVALID_LEAGUEID(40006, "无效leagueId"),
+    INVALID_APPID(40007, "无效appId"),
     ;
 
 
