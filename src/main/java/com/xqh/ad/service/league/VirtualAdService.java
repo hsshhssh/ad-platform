@@ -46,7 +46,7 @@ public class VirtualAdService extends LeagueAbstractService
 
             if(ReportTypeEnum._S2S.getValue() == adApp.getReportType())
             {
-                logger.info("上报方式:s2s appId:{}", adApp.getId());
+                logger.info("上报方式:s2s appId:{} reportUrl:{}", adApp.getId(), reportUrl);
                 // 上报
                 HttpResult httpResult = HttpUtils.get(reportUrl);
                 logger.info("上报返回值 httpResult:{}", httpResult);
