@@ -14,6 +14,7 @@ public enum ErrorResponseEunm
     DUPLICATE_URLCODE(40005, "该应用和媒体已存在推广链接"),
     INVALID_LEAGUEID(40006, "无效leagueId"),
     INVALID_APPID(40007, "无效appId"),
+    INVALID_S2S_PARAM(40008, "s2s方式必须填写下载跳转地址"),
     ;
 
 

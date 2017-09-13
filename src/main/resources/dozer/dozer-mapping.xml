@@ -35,6 +35,14 @@
             <a>leagueId</a>
             <b>leagueName</b>
         </field>
+        <field>
+            <a>reportType</a>
+            <b>reportType</b>
+        </field>
+        <field custom-converter="com.xqh.ad.utils.converter.DozerReportTypeToNameConverter">
+            <a>reportType</a>
+            <b>reportTypeStr</b>
+        </field>
 
     </mapping>
 

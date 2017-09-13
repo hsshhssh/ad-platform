@@ -45,11 +45,11 @@ public abstract class LeagueAbstractService
         String callback = req.getParameter("callback");
 
         //if(StringUtils.isBlank(imei) || StringUtils.isBlank(mac) || StringUtils.isBlank(ip))
-        if(StringUtils.isBlank(ip))
-        {
-            logger.error("请求参数异常 imei:{}  mac:{}  ip:{}", imei, mac, ip);
-            throw new RequestParamException("ip异常");
-        }
+        //if(StringUtils.isBlank(ip))
+        //{
+        //    logger.error("请求参数异常 imei:{}  mac:{}  ip:{}", imei, mac, ip);
+        //    throw new RequestParamException("ip异常");
+        //}
 
         if(null != callback && callback.length() > 500)
         {

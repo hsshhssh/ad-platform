@@ -23,7 +23,8 @@ public interface IAdAppController
 
 
     @PostMapping
-    public int update(@RequestBody @Valid @NotNull AdAppUpdateDTO dto);
+    public int update(@RequestBody @Valid @NotNull AdAppUpdateDTO dto,
+                      HttpServletResponse resp);
 
 
     @PostMapping("search")

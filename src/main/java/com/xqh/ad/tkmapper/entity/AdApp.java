@@ -38,6 +38,18 @@ public class AdApp {
     private String leagueUrl;
 
     /**
+     * 上报类型 1->302  2->s2s
+     */
+    @Column(name = "report_type")
+    private Integer reportType;
+
+    /**
+     * 下载跳转地址 report_type=1时  league_url为上报地址和跳转地址 report_type=2是 league_url为上报地址 report_url为跳转地址
+     */
+    @Column(name = "redirect_url")
+    private String redirectUrl;
+
+    /**
      * 创建时间
      */
     @Column(name = "create_time")
