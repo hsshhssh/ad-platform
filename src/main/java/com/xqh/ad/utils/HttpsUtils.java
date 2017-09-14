@@ -4,12 +4,14 @@ import com.xqh.ad.entity.other.HttpResult;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpVersion;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.ssl.TrustStrategy;
 
@@ -66,7 +68,9 @@ public class HttpsUtils
             throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException, IOException {
         CloseableHttpClient httpClient = createHttpsClient();
         HttpGet httpGet = new HttpGet(url);
-        httpGet.setHeaders(headers);
+        //httpGet.setHeaders(headers);
+        httpGet.setProtocolVersion(HttpVersion.HTTP_1_0);
+        httpGet.addHeader(HTTP.CONN_DIRECTIVE, HTTP.CONN_CLOSE);
         CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
         //String result = entity2String(httpResponse.getEntity());
         //
