@@ -7,7 +7,7 @@ import com.xqh.ad.tkmapper.entity.AdAppMedia;
 import com.xqh.ad.tkmapper.entity.AdClick;
 import com.xqh.ad.utils.CommonUtils;
 import com.xqh.ad.utils.Constant;
-import com.xqh.ad.utils.HttpUtils;
+import com.xqh.ad.utils.HttpsUtils;
 import com.xqh.ad.utils.UrlUtils;
 import com.xqh.ad.utils.constant.ReportTypeEnum;
 import org.apache.commons.lang3.StringUtils;
@@ -48,7 +48,7 @@ public class VirtualAdService extends LeagueAbstractService
             {
                 logger.info("上报方式:s2s appId:{} reportUrl:{}", adApp.getId(), reportUrl);
                 // 上报
-                HttpResult httpResult = HttpUtils.get(reportUrl);
+                HttpResult httpResult = HttpsUtils.get(reportUrl, "UTF-8");
                 logger.info("上报返回值 httpResult:{}", httpResult);
                 redirectUrl = adApp.getRedirectUrl();
             }
