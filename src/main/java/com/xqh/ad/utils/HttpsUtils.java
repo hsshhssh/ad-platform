@@ -23,6 +23,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
+import static org.apache.http.conn.ssl.SSLConnectionSocketFactory.getDefaultHostnameVerifier;
+
 /**
  * @author zhangminpeng on 2016-06-13 14:50
  */
@@ -44,7 +46,7 @@ public class HttpsUtils
                         return true;
                     }
                 }).build();
-        SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext);
+        SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext, new String[] { "TLSv1", "TLSv1.1", "TLSv1.2" }, null, getDefaultHostnameVerifier());
         return HttpClients.custom()
                 .setUserAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.84 Safari/537.36")
                 .setSSLSocketFactory(sslConnectionSocketFactory)
