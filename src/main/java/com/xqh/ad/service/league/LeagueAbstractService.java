@@ -1,6 +1,5 @@
 package com.xqh.ad.service.league;
 
-import com.xqh.ad.exception.RequestParamException;
 import com.xqh.ad.tkmapper.entity.AdApp;
 import com.xqh.ad.tkmapper.entity.AdAppMedia;
 import com.xqh.ad.tkmapper.entity.AdClick;
@@ -84,16 +83,18 @@ public abstract class LeagueAbstractService
             logger.info("手机类型--安卓");
             return Constant.PHONE_TYPE_ANDROID;
         }
-        else if(StringUtils.isNotBlank(idfa))
+        //else if(StringUtils.isNotBlank(idfa))
+        // 默认是ios
+        else
         {
             logger.info("手机类型--ios");
             return Constant.PHONE_TYPE_IOS;
         }
-        else
-        {
-            logger.error("手机类型--异常 idfa:{} && androidnId:{} 空 ", idfa, androidId);
-            throw new RequestParamException("手机类型异常");
-        }
+        //else
+        //{
+        //    logger.error("手机类型--异常 idfa:{} && androidnId:{} 空 ", idfa, androidId);
+        //    throw new RequestParamException("手机类型异常");
+        //}
     }
 
 

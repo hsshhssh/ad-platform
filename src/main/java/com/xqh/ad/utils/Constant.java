@@ -88,4 +88,14 @@ public class Constant
     public final static int PHONE_TYPE_IOS = 2;
 
 
+    /////////////////////////////////////////////////////////////////////////
+
+
+    public final static String BASCURL = "http://ad.uerbx.com";
+
+    /**
+     * 配置联盟回调地址的点击Id key
+     */
+    public final static String CALLBACK_CLICK_ID = "callbackClickId";
+
 }

@@ -16,6 +16,7 @@ import com.xqh.ad.tkmapper.mapper.AdAppMediaMapper;
 import com.xqh.ad.tkmapper.mapper.AdMediaMapper;
 import com.xqh.ad.utils.CommonUtils;
 import com.xqh.ad.utils.ConfigUtils;
+import com.xqh.ad.utils.Constant;
 import com.xqh.ad.utils.TestParamConfigUtils;
 import com.xqh.ad.utils.common.DozerUtils;
 import com.xqh.ad.utils.common.ExampleBuilder;
@@ -81,7 +82,7 @@ public class AdAppMediaController implements IAdAppMediaController
 
         adAppMedia.setMediaCode(adMedia.getCode());
         adAppMedia.setUrlCode(adAppMediaService.getUrlCode(adApp.getId(), adMedia.getId()));
-        adAppMedia.setUrl("http://ad.uerbx.com/xqh/ad/" + adAppMediaService.getUrlCode(adApp.getId(), adMedia.getId()));
+        adAppMedia.setUrl(Constant.BASCURL + "/xqh/ad/" + adAppMediaService.getUrlCode(adApp.getId(), adMedia.getId()));
         adAppMedia.setStartCount(Integer.valueOf(configUtils.getDefaultStartCount()));
         adAppMedia.setDiscountRate(Double.valueOf(configUtils.getDefaultDiscountRate()));
         int nowTime = (int) (System.currentTimeMillis()/1000);

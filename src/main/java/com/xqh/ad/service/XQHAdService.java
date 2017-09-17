@@ -59,10 +59,13 @@ public class XQHAdService
     @Autowired
     private VirtualAdService virtualAdService;
 
+    @Autowired
+    private CustomAdService customAdService;
+
     /**
      * 根据联盟编码选择Service
      */
-    public LeagueAbstractService dispatchLeague(String leagueCode)
+    public LeagueAbstractService dispatchLeague(String leagueCode, int leagueId)
     {
         if(Constant.REYUN.equals(leagueCode))
         {
@@ -101,6 +104,12 @@ public class XQHAdService
         }
         else
         {
+            if(customAdService.isCustomLeague(leagueId))
+            {
+                logger.info("自定义配置联盟");
+                return virtualAdService;
+            }
+
             logger.error("通道异常 leagueCode:{}",  leagueCode);
             throw new NoLeagueChannelException();
         }
