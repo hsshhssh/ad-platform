@@ -48,7 +48,7 @@ public class CustomAdController implements ICustomAdController
     {
         // 查询联盟信息
         Search searchLeague = new Search();
-        searchLeague.put("enName", enName);
+        searchLeague.put("enName_eq", enName);
         List<AdLeague> adLeagueList = adLeagueMapper.selectByExample(new ExampleBuilder(AdLeague.class).search(searchLeague).build());
 
         if(adLeagueList.size() != 1)
@@ -62,8 +62,8 @@ public class CustomAdController implements ICustomAdController
 
         // 获取clickId key值
         Search searchConfig = new Search();
-        searchConfig.put("leagueId", adLeague.getId());
-        searchConfig.put("xqhKey", Constant.CALLBACK_CLICK_ID);
+        searchConfig.put("leagueId_eq", adLeague.getId());
+        searchConfig.put("xqhKey_eq", Constant.CALLBACK_CLICK_ID);
         List<AdLeagueReportConfig> configList = configMapper.selectByExample(new ExampleBuilder(AdLeagueReportConfig.class).search(searchConfig).sort(Arrays.asList("id_desc")).build());
 
         if(configList.size() != 1)

@@ -107,7 +107,7 @@ public class XQHAdService
             if(customAdService.isCustomLeague(leagueId))
             {
                 logger.info("自定义配置联盟");
-                return virtualAdService;
+                return customAdService;
             }
 
             logger.error("通道异常 leagueCode:{}",  leagueCode);

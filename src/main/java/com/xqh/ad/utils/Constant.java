@@ -96,6 +96,11 @@ public class Constant
     /**
      * 配置联盟回调地址的点击Id key
      */
-    public final static String CALLBACK_CLICK_ID = "callbackClickId";
+    public final static String CALLBACK_CLICK_ID = "_callbackClickId";
+
+    /**
+     * 回调url
+     */
+    public final static String CALLBACK_URL = "_callbackUrl";
 
 }
