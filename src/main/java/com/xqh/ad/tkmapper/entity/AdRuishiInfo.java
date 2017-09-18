@@ -5,8 +5,9 @@ import lombok.Data;
 import javax.persistence.*;
 
 @Data
-@Table(name = "ad_league")
-public class AdLeague {
+@Table(name = "ad_ruishi_info")
+public class AdRuishiInfo
+{
     /**
      * 主键id
      */
@@ -15,26 +16,21 @@ public class AdLeague {
     private Integer id;
 
     /**
-     * 联盟名称
+     * 推广应用id
      */
-    private String name;
+    @Column(name = "app_id")
+    private Integer appId;
 
     /**
-     * 联盟编码
+     * 瑞狮信息q字段
      */
-    private String code;
+    @Column(name = "ruishi_q")
+    private String ruishiQ;
 
     /**
-     * 联盟英文名
+     * 备注信息
      */
-    @Column(name = "en_name")
-    private String enName;
-
-    /**
-     * 联盟回调地址
-     */
-    @Column(name = "callback_url")
-    private String callbackUrl;
+    private String remark;
 
     /**
      * 创建时间

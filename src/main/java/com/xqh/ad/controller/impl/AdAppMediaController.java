@@ -1,6 +1,7 @@
 package com.xqh.ad.controller.impl;
 
 import com.github.pagehelper.Page;
+import com.google.common.collect.Maps;
 import com.xqh.ad.controller.api.IAdAppMediaController;
 import com.xqh.ad.entity.dto.AdAppMediaCreateDTO;
 import com.xqh.ad.entity.dto.AdAppMediaUpdateDTO;
@@ -15,6 +16,8 @@ import com.xqh.ad.tkmapper.mapper.AdAppMediaMapper;
 import com.xqh.ad.tkmapper.mapper.AdMediaMapper;
 import com.xqh.ad.utils.CommonUtils;
 import com.xqh.ad.utils.ConfigUtils;
+import com.xqh.ad.utils.Constant;
+import com.xqh.ad.utils.TestParamConfigUtils;
 import com.xqh.ad.utils.common.DozerUtils;
 import com.xqh.ad.utils.common.ExampleBuilder;
 import com.xqh.ad.utils.common.PageResult;
@@ -33,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
+import java.util.TreeMap;
 
 /**
  * Created by hssh on 2017/9/10.
@@ -57,6 +61,9 @@ public class AdAppMediaController implements IAdAppMediaController
     @Autowired
     private ConfigUtils configUtils;
 
+    @Autowired
+    private TestParamConfigUtils testParamConfigUtils;
+
     @Override
     public int insert(@RequestBody @Valid @NotNull AdAppMediaCreateDTO dto,
                       HttpServletResponse resp)
@@ -75,7 +82,7 @@ public class AdAppMediaController implements IAdAppMediaController
 
         adAppMedia.setMediaCode(adMedia.getCode());
         adAppMedia.setUrlCode(adAppMediaService.getUrlCode(adApp.getId(), adMedia.getId()));
-        adAppMedia.setUrl("http://ad.uerbx.com/xqh/ad/" + adAppMediaService.getUrlCode(adApp.getId(), adMedia.getId()));
+        adAppMedia.setUrl(Constant.BASCURL + "/xqh/ad/" + adAppMediaService.getUrlCode(adApp.getId(), adMedia.getId()));
         adAppMedia.setStartCount(Integer.valueOf(configUtils.getDefaultStartCount()));
         adAppMedia.setDiscountRate(Double.valueOf(configUtils.getDefaultDiscountRate()));
         int nowTime = (int) (System.currentTimeMillis()/1000);
@@ -117,5 +124,29 @@ public class AdAppMediaController implements IAdAppMediaController
         Page<AdAppMedia> appMediaPage = (Page<AdAppMedia>) adAppMediaMapper.selectByExampleAndRowBounds(example, new RowBounds(page, size));
 
         return new PageResult<>(appMediaPage.getTotal(), DozerUtils.mapList(appMediaPage.getResult(), AdAppMediaVO.class));
+    }
+
+    @Override
+    public String getTestUrl(@RequestParam("id") int id, HttpServletResponse resp)
+    {
+        AdAppMedia adAppMedia = adAppMediaMapper.selectByPrimaryKey(id);
+
+        if(null == adAppMedia)
+        {
+            CommonUtils.sendError(resp, ErrorResponseEunm.INVALID_APPID);
+            return null;
+        }
+
+        String host = testParamConfigUtils.getHost().trim() + adAppMedia.getUrlCode();
+
+        TreeMap<String, String> params = Maps.newTreeMap();
+
+        params.put("key", adAppMedia.getAppKey());
+        params.put("ip", testParamConfigUtils.getIp().trim());
+        params.put("idfa", testParamConfigUtils.getIdfa().trim());
+        params.put("callback", testParamConfigUtils.getCallback().trim());
+
+        return CommonUtils.getFullUrl(host, params);
+
     }
 }

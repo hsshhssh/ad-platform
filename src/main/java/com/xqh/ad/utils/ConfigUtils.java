@@ -32,4 +32,6 @@ public class ConfigUtils
     @Value(path = "/config/zkconf/ad", key = "defaultDiscountRate")
     private String defaultDiscountRate;
 
+
+
 }

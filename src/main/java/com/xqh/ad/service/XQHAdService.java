@@ -53,10 +53,19 @@ public class XQHAdService
     @Autowired
     private RuiShiAdService ruiShiAdService;
 
+    @Autowired
+    private CaulyAdService caulyAdService;
+
+    @Autowired
+    private VirtualAdService virtualAdService;
+
+    @Autowired
+    private CustomAdService customAdService;
+
     /**
      * 根据联盟编码选择Service
      */
-    public LeagueAbstractService dispatchLeague(String leagueCode)
+    public LeagueAbstractService dispatchLeague(String leagueCode, int leagueId)
     {
         if(Constant.REYUN.equals(leagueCode))
         {
@@ -83,8 +92,24 @@ public class XQHAdService
             logger.info("瑞狮通道");
             return ruiShiAdService;
         }
+        else if(Constant.CAULY.equals(leagueCode))
+        {
+            logger.info("CAULY通道");
+            return caulyAdService;
+        }
+        else if(Constant.VIRTUAL.equals(leagueCode))
+        {
+            logger.info("虚拟通道");
+            return virtualAdService;
+        }
         else
         {
+            if(customAdService.isCustomLeague(leagueId))
+            {
+                logger.info("自定义配置联盟");
+                return customAdService;
+            }
+
             logger.error("通道异常 leagueCode:{}",  leagueCode);
             throw new NoLeagueChannelException();
         }

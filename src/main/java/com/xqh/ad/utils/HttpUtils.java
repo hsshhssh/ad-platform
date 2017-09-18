@@ -3,6 +3,7 @@ package com.xqh.ad.utils;
 
 import com.xqh.ad.entity.other.HttpResult;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -11,6 +12,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.protocol.HTTP;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -61,6 +63,26 @@ public class HttpUtils {
         CloseableHttpClient httpClient = genHttpClient();
 
         HttpGet httpGet = new HttpGet(url);
+        CloseableHttpResponse response = null;
+        try {
+            response = httpClient.execute(httpGet);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return genHttpResult(response);
+
+    }
+
+    public static HttpResult getShortConn(String url) {
+
+        // 设置连接时间为5秒
+        CloseableHttpClient httpClient = genHttpClient();
+
+        HttpGet httpGet = new HttpGet(url);
+
+        httpGet.setProtocolVersion(HttpVersion.HTTP_1_0);
+        httpGet.addHeader(HTTP.CONN_DIRECTIVE, HTTP.CONN_CLOSE);
         CloseableHttpResponse response = null;
         try {
             response = httpClient.execute(httpGet);

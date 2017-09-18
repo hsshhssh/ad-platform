@@ -1,7 +1,7 @@
 package com.xqh.ad.utils;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by hssh on 2017/8/13.
@@ -67,7 +67,7 @@ public class UrlUtils
      */
     public static Map<String, String> URLRequest(String URL)
     {
-        Map<String, String> mapRequest = new HashMap<String, String>();
+        Map<String, String> mapRequest = new TreeMap<>();
 
         String[] arrSplit=null;
 

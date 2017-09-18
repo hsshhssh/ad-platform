@@ -65,6 +65,15 @@ public class Constant
      */
     public final static String RUISHI = "0005";
 
+    /**
+     * Cauly
+     */
+    public final static String CAULY = "0006";
+
+    /**
+     * 虚拟联盟
+     */
+    public final static String VIRTUAL = "0007";
 
     /////////////////////////////////////////////////////////////////////////
 
@@ -78,5 +87,20 @@ public class Constant
      */
     public final static int PHONE_TYPE_IOS = 2;
 
+
+    /////////////////////////////////////////////////////////////////////////
+
+
+    public final static String BASCURL = "http://ad.uerbx.com";
+
+    /**
+     * 配置联盟回调地址的点击Id key
+     */
+    public final static String CALLBACK_CLICK_ID = "_callbackClickId";
+
+    /**
+     * 回调url
+     */
+    public final static String CALLBACK_URL = "_callbackUrl";
 
 }

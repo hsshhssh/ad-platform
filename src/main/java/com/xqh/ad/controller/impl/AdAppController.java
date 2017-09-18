@@ -15,6 +15,8 @@ import com.xqh.ad.utils.common.DozerUtils;
 import com.xqh.ad.utils.common.ExampleBuilder;
 import com.xqh.ad.utils.common.PageResult;
 import com.xqh.ad.utils.common.Search;
+import com.xqh.ad.utils.constant.ReportTypeEnum;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +48,13 @@ public class AdAppController implements IAdAppController
     @Override
     public int insert(@RequestBody @Valid @NotNull AdAppCreateDTO dto, HttpServletResponse resp)
     {
+        if(ReportTypeEnum._S2S.getValue() == dto.getReportType() && StringUtils.isBlank(dto.getRedirectUrl()))
+        {
+            logger.error("参数异常 dto:{}", dto);
+            CommonUtils.sendError(resp, ErrorResponseEunm.INVALID_S2S_PARAM);
+            return 0;
+        }
+
         AdApp adApp = DozerUtils.map(dto, AdApp.class);
 
         // 检验leagueId
@@ -68,8 +77,15 @@ public class AdAppController implements IAdAppController
     }
 
     @Override
-    public int update(@RequestBody @Valid @NotNull AdAppUpdateDTO dto)
+    public int update(@RequestBody @Valid @NotNull AdAppUpdateDTO dto, HttpServletResponse resp)
     {
+        if(ReportTypeEnum._S2S.getValue() == dto.getReportType() && StringUtils.isBlank(dto.getRedirectUrl()))
+        {
+            logger.error("参数异常 dto:{}", dto);
+            CommonUtils.sendError(resp, ErrorResponseEunm.INVALID_S2S_PARAM);
+            return 0;
+        }
+
         AdApp adApp = DozerUtils.map(dto, AdApp.class);
 
         adAppMapper.updateByPrimaryKeySelective(adApp);

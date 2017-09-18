@@ -89,7 +89,7 @@ public class XQHAdController implements IXQHAdController
         LeagueAbstractService leagueAbstractService = null;
         try
         {
-            leagueAbstractService = xqhAdService.dispatchLeague(adApp.getLeagueCode());
+            leagueAbstractService = xqhAdService.dispatchLeague(adApp.getLeagueCode(), adApp.getLeagueId());
         }
         catch (NoLeagueChannelException e)
         {

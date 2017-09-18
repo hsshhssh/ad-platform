@@ -2,6 +2,7 @@ package com.xqh.ad.entity.dto;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -20,5 +21,10 @@ public class AdAppCreateDTO
 
     @NotBlank
     private String leagueUrl;
+
+    @NotNull @Range(min = 1, max = 2)
+    private Integer reportType;
+
+    private String redirectUrl;
 
 }

@@ -30,4 +30,8 @@ public interface IAdAppMediaController
     public PageResult<AdAppMediaVO> search(@RequestParam("search") Search search,
                                            @RequestParam(value = "page", defaultValue = "1") int page,
                                            @RequestParam(value = "size", defaultValue = "10") int size);
+
+    @GetMapping("test/url")
+    public String getTestUrl(@RequestParam("id") int id, HttpServletResponse resp);
+
 }

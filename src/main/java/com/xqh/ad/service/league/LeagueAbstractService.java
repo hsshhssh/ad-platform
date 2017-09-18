@@ -1,6 +1,5 @@
 package com.xqh.ad.service.league;
 
-import com.xqh.ad.exception.RequestParamException;
 import com.xqh.ad.tkmapper.entity.AdApp;
 import com.xqh.ad.tkmapper.entity.AdAppMedia;
 import com.xqh.ad.tkmapper.entity.AdClick;
@@ -45,11 +44,11 @@ public abstract class LeagueAbstractService
         String callback = req.getParameter("callback");
 
         //if(StringUtils.isBlank(imei) || StringUtils.isBlank(mac) || StringUtils.isBlank(ip))
-        if(StringUtils.isBlank(ip))
-        {
-            logger.error("请求参数异常 imei:{}  mac:{}  ip:{}", imei, mac, ip);
-            throw new RequestParamException("ip异常");
-        }
+        //if(StringUtils.isBlank(ip))
+        //{
+        //    logger.error("请求参数异常 imei:{}  mac:{}  ip:{}", imei, mac, ip);
+        //    throw new RequestParamException("ip异常");
+        //}
 
         if(null != callback && callback.length() > 500)
         {
@@ -84,16 +83,18 @@ public abstract class LeagueAbstractService
             logger.info("手机类型--安卓");
             return Constant.PHONE_TYPE_ANDROID;
         }
-        else if(StringUtils.isNotBlank(idfa))
+        //else if(StringUtils.isNotBlank(idfa))
+        // 默认是ios
+        else
         {
             logger.info("手机类型--ios");
             return Constant.PHONE_TYPE_IOS;
         }
-        else
-        {
-            logger.error("手机类型--异常 idfa:{} && androidnId:{} 空 ", idfa, androidId);
-            throw new RequestParamException("手机类型异常");
-        }
+        //else
+        //{
+        //    logger.error("手机类型--异常 idfa:{} && androidnId:{} 空 ", idfa, androidId);
+        //    throw new RequestParamException("手机类型异常");
+        //}
     }
 
 
