@@ -5,9 +5,12 @@ import com.dangdang.ddframe.rdb.sharding.api.ShardingDataSourceFactory;
 import com.dangdang.ddframe.rdb.sharding.api.rule.DataSourceRule;
 import com.dangdang.ddframe.rdb.sharding.api.rule.ShardingRule;
 import com.dangdang.ddframe.rdb.sharding.api.rule.TableRule;
-import com.dangdang.ddframe.rdb.sharding.api.strategy.database.DatabaseShardingStrategy;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.table.TableShardingStrategy;
 import com.google.common.collect.Lists;
+import org.hssh.common.DataSourceName;
+import org.hssh.common.ZkdbcpConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -25,12 +28,19 @@ import java.util.Map;
 @Configuration
 public class ShardingJdbcConfig
 {
+    @Autowired
+    ZkdbcpConfig zkdbcpConfig;
 
     @Bean
     @Primary
     public DataSource buildDataSource() throws SQLException {
         Map<String, DataSource> dataSourceMap = new HashMap<>(1);
-        dataSourceMap.put("ds", getDataSource());
+
+        //Map<String, DataSource> slaveDataSourceMap = new HashMap<>(1);
+        //slaveDataSourceMap.put("slave", getDataSource("db_xqhpay"));
+        //dataSourceMap.put("ds", MasterSlaveDataSourceFactory.createDataSource("ds", "master", getDataSource("db_xqhad"), slaveDataSourceMap));
+        //dataSourceMap.put("ds", getDataSource("db_xqhad"));
+        dataSourceMap.put("ds", zkdbcpConfig.createDataSource(DataSourceName.master));
         DataSourceRule dataSourceRule = new DataSourceRule(dataSourceMap, "ds");
 
 
@@ -43,7 +53,6 @@ public class ShardingJdbcConfig
                 .actualTables(clickTableName)
                 .dataSourceRule(dataSourceRule)
                 .tableShardingStrategy(new TableShardingStrategy("id", new DayTableShardingAlgorithm()))
-                .databaseShardingStrategy(new DatabaseShardingStrategy("id") new )
                 .build();
 
         ShardingRule shardingRule = ShardingRule.builder()
@@ -53,21 +62,6 @@ public class ShardingJdbcConfig
 
         return ShardingDataSourceFactory.createDataSource(shardingRule);
 
-    }
-
-    public DataSource getDataSource()
-    {
-        DruidDataSource dataSource = new DruidDataSource();
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://127.0.001:3306/db_xqhad?useUnicode=true&characterEncoding=UTF-8 ");
-        dataSource.setUsername("root");
-        dataSource.setPassword("");
-        try {
-            dataSource.init();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return dataSource;
     }
 
 }

@@ -3,13 +3,10 @@ package com.xqh.ad;
 import com.xqh.ad.service.AdClickService;
 import com.xqh.ad.tkmapper.entity.AdClick;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 public class AdApplicationTests {
 
 	@Autowired
@@ -25,7 +22,18 @@ public class AdApplicationTests {
 
 	public static void main(String[] args)
 	{
+		for (int i=1; i<=15; i++)
+		{
+			System.out.print(String.format("%02d", i));
+			System.out.print(",");
+		}
+		System.out.println("");
+		for (int i = 16; i <=31 ; i++)
+		{
 
+			System.out.print(i);
+			System.out.print(",");
+		}
 	}
 
 }

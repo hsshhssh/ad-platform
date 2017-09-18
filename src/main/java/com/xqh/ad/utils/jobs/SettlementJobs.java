@@ -1,4 +1,4 @@
-package com.xqh.ad.utils;
+package com.xqh.ad.utils.jobs;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
@@ -11,6 +11,7 @@ import com.xqh.ad.tkmapper.mapper.AdAppMediaMapper;
 import com.xqh.ad.tkmapper.mapper.AdClickMapper;
 import com.xqh.ad.tkmapper.mapper.AdDaySettlementMapper;
 import com.xqh.ad.tkmapper.mapper.AdDownloadMapper;
+import com.xqh.ad.utils.CommonUtils;
 import com.xqh.ad.utils.common.ExampleBuilder;
 import com.xqh.ad.utils.common.Search;
 import org.slf4j.Logger;
@@ -28,9 +29,9 @@ import java.util.Map;
  * Created by hssh on 2017/5/13.
  */
 @Component
-public class Jobs
+public class SettlementJobs
 {
-    private static Logger logger = LoggerFactory.getLogger(Jobs.class);
+    private static Logger logger = LoggerFactory.getLogger(SettlementJobs.class);
 
     @Autowired
     private AdClickMapper adClickMapper;
