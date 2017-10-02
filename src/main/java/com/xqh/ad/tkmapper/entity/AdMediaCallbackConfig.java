@@ -5,9 +5,8 @@ import lombok.Data;
 import javax.persistence.*;
 
 @Data
-@Table(name = "ad_media")
-public class AdMedia
-{
+@Table(name = "ad_media_callback_config")
+public class AdMediaCallbackConfig {
     /**
      * 主键id
      */
@@ -16,25 +15,27 @@ public class AdMedia
     private Integer id;
 
     /**
-     * 媒体名称
+     * 媒体id
      */
-    private String name;
+    @Column(name = "media_id")
+    private Integer mediaId;
 
     /**
-     * 媒体编码
+     * 媒体回调key
      */
-    private String code;
+    @Column(name = "media_key")
+    private String mediaKey;
 
     /**
-     * 1自定义回调 2配置回调
+     * 新企航回调key
      */
-    private Integer type;
+    @Column(name = "xqh_key")
+    private String xqhKey;
 
     /**
-     * 回调url
+     * 备注信息
      */
-    @Column(name = "callback_url")
-    private String callbackUrl;
+    private String remark;
 
     /**
      * 创建时间

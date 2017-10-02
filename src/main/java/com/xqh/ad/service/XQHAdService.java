@@ -1,22 +1,23 @@
 package com.xqh.ad.service;
 
+import com.google.common.base.Throwables;
 import com.xqh.ad.exception.NoLeagueChannelException;
 import com.xqh.ad.service.league.*;
-import com.xqh.ad.tkmapper.entity.AdAppMedia;
-import com.xqh.ad.tkmapper.entity.AdClick;
-import com.xqh.ad.tkmapper.entity.AdDownload;
-import com.xqh.ad.tkmapper.mapper.AdAppMediaMapper;
-import com.xqh.ad.tkmapper.mapper.AdClickMapper;
-import com.xqh.ad.tkmapper.mapper.AdDownloadMapper;
-import com.xqh.ad.utils.AsyncUtils;
-import com.xqh.ad.utils.Constant;
+import com.xqh.ad.tkmapper.entity.*;
+import com.xqh.ad.tkmapper.mapper.*;
+import com.xqh.ad.utils.*;
 import com.xqh.ad.utils.common.DozerUtils;
 import com.xqh.ad.utils.common.ExampleBuilder;
 import com.xqh.ad.utils.common.Search;
+import com.xqh.ad.utils.constant.MediaTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by hssh on 2017/8/12.
@@ -61,6 +62,18 @@ public class XQHAdService
 
     @Autowired
     private CustomAdService customAdService;
+
+    @Autowired
+    private AdMediaMapper adMediaMapper;
+
+    @Autowired
+    private AdMediaCallbackConfigMapper adMediaCallbackConfigMapper;
+
+    @Autowired
+    private ConfigUtils configUtils;
+
+    @Autowired
+    private AdPPMediaService adPPMediaService;
 
     /**
      * 根据联盟编码选择Service
@@ -151,8 +164,19 @@ public class XQHAdService
 
         if(!isSkip)
         {
+
+            String callbackUrl;
+            try
+            {
+                callbackUrl = getCallbackUrl(adClick);
+            } catch (Exception e)
+            {
+                logger.info("获取回调地址异常" + Throwables.getStackTraceAsString(e));
+                return ;
+            }
+
             logger.info("不扣量 回调下游 clickId:{}", clickId);
-            asyncUtils.callbackUser(adClick.getCallbackUrl());
+            asyncUtils.callbackUser(callbackUrl);
         }
         else
         {
@@ -160,6 +184,73 @@ public class XQHAdService
         }
 
     }
+
+    private String getCallbackUrl(AdClick adClick)
+    {
+        AdMedia adMedia = adMediaMapper.selectByPrimaryKey(adClick.getMediaId());
+
+        if(MediaTypeEnum.CUSTOM_CALLBACK.getValue() == adMedia.getType())
+        {
+            logger.info("自定义回调 mediaId:{} callbackUrl:{}", adMedia.getId(), adClick.getCallbackUrl());
+            return adClick.getCallbackUrl();
+        }
+        else if(MediaTypeEnum.CONFIG_CALLBACK.getValue() == adMedia.getType())
+        {
+            logger.info("配置回调 mediaId:{}", adMedia.getId());
+
+            Search search = new Search();
+            search.put("mediaId_eq", adClick.getMediaId());
+            List<AdMediaCallbackConfig> configList = adMediaCallbackConfigMapper.selectByExample(new ExampleBuilder(AdMediaCallbackConfig.class).search(search).build());
+
+            String baseHost = UrlUtils.UrlPage(adMedia.getCallbackUrl());
+            Map<String, String> params = UrlUtils.URLRequest(adMedia.getCallbackUrl());
+
+            for (AdMediaCallbackConfig config : configList)
+            {
+                params.put(config.getMediaKey(), getValueByReflect(adClick, config.getXqhKey()));
+            }
+
+            if(configUtils.getPpMediaCode().equals(adMedia.getCode()))
+            {
+                adPPMediaService.addPPMediaParam(params, adClick.getAppMediaId(), adClick.getIdfa());
+            }
+
+            return CommonUtils.getFullUrl(baseHost, params);
+
+        }
+
+        throw new RuntimeException("参数异常");
+    }
+
+
+    private String getValueByReflect(AdClick adClick, String key)
+    {
+        String xqhKeyValue;
+        Class<?> clazz = adClick.getClass();
+        Field field;
+        try
+        {
+            field = clazz.getDeclaredField(key);
+            field.setAccessible(true);
+            xqhKeyValue = String.valueOf(field.get(adClick));
+        }
+        catch (NoSuchFieldException e)
+        {
+            logger.info("配置下游 配置信息有误 key:{} e:{}", key, Throwables.getStackTraceAsString(e));
+
+            throw new RuntimeException("配置信息有误");
+        }
+        catch (IllegalAccessException e)
+        {
+            logger.info("配置下游 配置信息有误 key:{} e:{}", key, Throwables.getStackTraceAsString(e));
+
+            throw new RuntimeException("配置信息有误");
+        }
+
+        return xqhKeyValue;
+    }
+
+
 
 
     /**

@@ -32,6 +32,8 @@ public class ConfigUtils
     @Value(path = "/config/zkconf/ad", key = "defaultDiscountRate")
     private String defaultDiscountRate;
 
+    @Value(path = "/config/zkconf/ad", key = "ppMediaCode")
+    private String ppMediaCode;
 
 
 }
