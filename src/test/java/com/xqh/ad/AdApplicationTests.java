@@ -14,7 +14,7 @@ public class AdApplicationTests {
 	public static void main(String[] args)
 	{
 		System.out.println(String.format("%05d%05d", 1, 22));
-
+		System.out.println(Integer.valueOf(null));
 
 		String url = "http://www.baidu.com";
 		System.out.println(UrlUtils.UrlPage(url));

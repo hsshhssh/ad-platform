@@ -23,4 +23,13 @@ public interface IXQHAdController
                     HttpServletResponse resp,
                     @PathVariable("urlCode") String urlCode);
 
+
+    /**
+     * 跳转地址 s2s方式专用
+     */
+    @GetMapping("/redirect/{token}")
+    public void redirect(HttpServletRequest req,
+                         HttpServletResponse resp,
+                         @PathVariable("token") String token);
+
 }

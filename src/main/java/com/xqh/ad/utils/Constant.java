@@ -35,6 +35,12 @@ public class Constant
 
 
     /**
+     * 无效token
+     */
+    public final static String ERROR_TOKEN = "0006";
+
+
+    /**
      * 系统繁忙
      */
     public final static String ERROR_SYS = "1000";

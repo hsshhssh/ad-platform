@@ -1,7 +1,9 @@
 package com.xqh.ad.controller.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Throwables;
 import com.xqh.ad.controller.api.IXQHAdController;
+import com.xqh.ad.entity.other.S2SReportResult;
 import com.xqh.ad.exception.NoLeagueChannelException;
 import com.xqh.ad.exception.RequestParamException;
 import com.xqh.ad.service.AdAppMediaService;
@@ -11,6 +13,8 @@ import com.xqh.ad.tkmapper.entity.AdApp;
 import com.xqh.ad.tkmapper.entity.AdAppMedia;
 import com.xqh.ad.tkmapper.entity.AdClick;
 import com.xqh.ad.tkmapper.mapper.AdAppMapper;
+import com.xqh.ad.tkmapper.mapper.AdAppMediaMapper;
+import com.xqh.ad.tkmapper.mapper.AdClickMapper;
 import com.xqh.ad.utils.CommonUtils;
 import com.xqh.ad.utils.ConfigUtils;
 import com.xqh.ad.utils.Constant;
@@ -18,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,6 +47,12 @@ public class XQHAdController implements IXQHAdController
 
     @Autowired
     private ConfigUtils configUtils;
+
+    @Autowired
+    private AdClickMapper adClickMapper;
+
+    @Autowired
+    private AdAppMediaMapper adAppMediaMapper;
 
     @Override
     @Transactional
@@ -112,10 +123,57 @@ public class XQHAdController implements IXQHAdController
             return ;
         }
 
-        leagueAbstractService.redirectUrl(req, resp, adApp, adAppMedia, adClick);
-
+        String reportTypeStr = (req.getParameter("report_type"));
+        if(null != reportTypeStr && 2 == Integer.valueOf(reportTypeStr))
+        {
+            logger.info("s2s方式 reportType:{}", reportTypeStr);
+            S2SReportResult reportResult = new S2SReportResult("success", String.valueOf(adClick.getId()));
+            CommonUtils.writeResponse(resp, JSONObject.toJSONString(reportResult));
+        }
+        else
+        {
+            logger.info("302方式 reportType:{}", reportTypeStr);
+            leagueAbstractService.redirectUrl(req, resp, adApp, adAppMedia, adClick);
+        }
 
         return ;
 
+    }
+
+    @Override
+    public void redirect(HttpServletRequest req,
+                         HttpServletResponse resp,
+                         @PathVariable("token") String token)
+    {
+        logger.info("s2s方式 跳转地址 token:{}", token);
+
+        AdClick adClick = adClickMapper.selectByPrimaryKey(Integer.valueOf(token));
+        if(null == adClick)
+        {
+            logger.error("跳转方法 token：{} 无效 ", token);
+            CommonUtils.writeResponse(resp, Constant.ERROR_TOKEN);
+            return ;
+        }
+
+        AdApp adApp = adAppMapper.selectByPrimaryKey(adClick.getAppId());
+        AdAppMedia adAppMedia = adAppMediaMapper.selectByPrimaryKey(adClick.getAppMediaId());
+
+
+        // 选择联盟通道
+        LeagueAbstractService leagueAbstractService = null;
+        try
+        {
+            leagueAbstractService = xqhAdService.dispatchLeague(adApp.getLeagueCode(), adApp.getLeagueId());
+        }
+        catch (NoLeagueChannelException e)
+        {
+            logger.error("无联盟通道 e:{}", Throwables.getStackTraceAsString(e));
+            CommonUtils.writeResponse(resp, Constant.ERROR_CHANNEL);
+            return;
+        }
+
+        leagueAbstractService.redirectUrl(req, resp, adApp, adAppMedia, adClick);
+
+        return;
     }
 }
