@@ -2,6 +2,7 @@ package com.xqh.ad.controller.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.xqh.ad.controller.api.ICustomAdController;
+import com.xqh.ad.entity.other.CallbackResponse;
 import com.xqh.ad.service.XQHAdService;
 import com.xqh.ad.tkmapper.entity.AdLeague;
 import com.xqh.ad.tkmapper.entity.AdLeagueReportConfig;
@@ -11,6 +12,7 @@ import com.xqh.ad.utils.CommonUtils;
 import com.xqh.ad.utils.Constant;
 import com.xqh.ad.utils.common.ExampleBuilder;
 import com.xqh.ad.utils.common.Search;
+import com.xqh.ad.utils.constant.CallbackResponseEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,10 +87,13 @@ public class CustomAdController implements ICustomAdController
         if(!StringUtils.isNumeric(clickIdStr))
         {
             logger.error("联盟 ：{}  clickId{}不合法 ", adLeague.getName(), clickIdStr);
+            CommonUtils.writeResponse(resp, JSONObject.toJSONString(new CallbackResponse(CallbackResponseEnum.ERROR_CLICK_ID)));
             return ;
         }
 
         xqhAdService.callback(Integer.valueOf(clickIdStr));
+        CommonUtils.writeResponse(resp, JSONObject.toJSONString(new CallbackResponse(CallbackResponseEnum.SUCC)));
+        return;
 
     }
 }

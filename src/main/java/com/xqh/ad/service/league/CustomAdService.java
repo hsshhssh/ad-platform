@@ -140,6 +140,13 @@ public class CustomAdService extends LeagueAbstractService
                 continue;
             }
 
+            if(Constant.CALLBACK_TIMESTAMP.equals(reportConfig.getXqhKey()))
+            {
+                // 上报地址参数中包含时间戳
+                params.put(reportConfig.getLeagueKey(), String.valueOf(System.currentTimeMillis()/1000));
+                continue;
+            }
+
             String xqhKeyValue = null;
             Class<?> clazz = adClick.getClass();
             Field field = null;

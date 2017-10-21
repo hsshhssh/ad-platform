@@ -109,4 +109,14 @@ public class Constant
      */
     public final static String CALLBACK_URL = "_callbackUrl";
 
+    /**
+     * 时间戳
+     */
+    public final static String CALLBACK_TIMESTAMP = "_timestamp";
+
+
+    /////////////////////////////////////////////////////////////////////////
+    public final static String SUCC = "success";
+    public final static String FAIL = "fail";
+
 }
