@@ -47,7 +47,7 @@ public class TencentAdService extends LeagueAbstractService
     public static Logger logger = LoggerFactory.getLogger(TencentAdService.class);
 
     @Override
-    public void redirectUrl(HttpServletRequest req, HttpServletResponse resp, AdApp adApp, AdAppMedia adAppMedia, AdClick adClick)
+    public void redirectUrl(HttpServletRequest req, HttpServletResponse resp, AdApp adApp, AdAppMedia adAppMedia, AdClick adClick, String reportTypeParam)
     {
         logger.info("腾讯通道 appId:{} url:{}", adApp.getId(), adApp.getLeagueUrl());
 

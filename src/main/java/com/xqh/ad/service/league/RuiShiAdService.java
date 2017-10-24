@@ -38,7 +38,7 @@ public class RuiShiAdService extends LeagueAbstractService
     private AdRuishiInfoMapper ruishiInfoMapper;
 
     @Override
-    public void redirectUrl(HttpServletRequest req, HttpServletResponse resp, AdApp adApp, AdAppMedia adAppMedia, AdClick adClick)
+    public void redirectUrl(HttpServletRequest req, HttpServletResponse resp, AdApp adApp, AdAppMedia adAppMedia, AdClick adClick, String reportTypeParam)
     {
         logger.info("瑞狮url appid:{} url:{}", adApp.getId(), adApp.getLeagueUrl());
 

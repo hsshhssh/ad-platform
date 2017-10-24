@@ -16,7 +16,7 @@ public class YouMengAdService extends LeagueAbstractService
 {
 
     @Override
-    public void redirectUrl(HttpServletRequest req, HttpServletResponse resp, AdApp adApp, AdAppMedia adAppMedia, AdClick adClick) {
+    public void redirectUrl(HttpServletRequest req, HttpServletResponse resp, AdApp adApp, AdAppMedia adAppMedia, AdClick adClick, String reportTypeParam) {
 
     }
 }

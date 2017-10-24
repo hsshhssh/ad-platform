@@ -33,7 +33,7 @@ public class ReYunAdService extends LeagueAbstractService
     private ConfigUtils configUtils;
 
     @Override
-    public void redirectUrl(HttpServletRequest req, HttpServletResponse resp, AdApp adApp, AdAppMedia adAppMedia, AdClick adClick)
+    public void redirectUrl(HttpServletRequest req, HttpServletResponse resp, AdApp adApp, AdAppMedia adAppMedia, AdClick adClick, String reportTypeParam)
     {
         logger.info("热云推广url appid:{} url:{}", adApp.getId(), adApp.getLeagueUrl());
 

@@ -56,7 +56,7 @@ public class CustomAdService extends LeagueAbstractService
     }
 
     @Override
-    public void redirectUrl(HttpServletRequest req, HttpServletResponse resp,AdApp adApp, AdAppMedia adAppMedia, AdClick adClick )
+    public void redirectUrl(HttpServletRequest req, HttpServletResponse resp,AdApp adApp, AdAppMedia adAppMedia, AdClick adClick , String reportTypeParam)
     {
         AdLeague adLeague = adLeagueMapper.selectByPrimaryKey(adApp.getLeagueId());
 
@@ -74,7 +74,9 @@ public class CustomAdService extends LeagueAbstractService
                 // 上报
                 HttpResult httpResult = HttpsUtils.get(reportUrl, "UTF-8");
                 logger.info("配置联盟 上报返回值 httpResult:{}", httpResult);
-                redirectUrl = adApp.getRedirectUrl();
+
+                dealWithS2S(reportTypeParam, resp, adClick, adApp);
+                return;
             }
             else
             {

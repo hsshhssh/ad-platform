@@ -29,7 +29,7 @@ public class DaoYouDaoAdService extends LeagueAbstractService
     private static Logger logger = LoggerFactory.getLogger(DaoYouDaoAdService.class);
 
     @Override
-    public void redirectUrl(HttpServletRequest req, HttpServletResponse resp, AdApp adApp, AdAppMedia adAppMedia, AdClick adClick)
+    public void redirectUrl(HttpServletRequest req, HttpServletResponse resp, AdApp adApp, AdAppMedia adAppMedia, AdClick adClick, String reportTypeParam)
     {
         logger.info("道有道推广url appId:{} url:{}", adApp.getId(), adApp.getLeagueUrl());
 

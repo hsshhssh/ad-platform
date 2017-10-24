@@ -29,7 +29,7 @@ public class VirtualAdService extends LeagueAbstractService
     private static Logger logger = LoggerFactory.getLogger(VirtualAdService.class);
 
     @Override
-    public void redirectUrl(HttpServletRequest req, HttpServletResponse resp, AdApp adApp, AdAppMedia adAppMedia, AdClick adClick)
+    public void redirectUrl(HttpServletRequest req, HttpServletResponse resp, AdApp adApp, AdAppMedia adAppMedia, AdClick adClick, String reportTypeParam)
     {
 
         logger.info("虚拟联盟url appid:{} url:{}", adApp.getId(), adApp.getLeagueUrl());

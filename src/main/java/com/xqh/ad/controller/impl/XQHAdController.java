@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * Created by hssh on 2017/8/12.
@@ -124,16 +125,16 @@ public class XQHAdController implements IXQHAdController
         }
 
         String reportTypeStr = (req.getParameter("report_type"));
-        if(null != reportTypeStr && 2 == Integer.valueOf(reportTypeStr))
+        if(null != reportTypeStr && 2 == Integer.valueOf(reportTypeStr) && 1 == adApp.getReportType())
         {
-            logger.info("s2s方式 reportType:{}", reportTypeStr);
+            logger.info("下游s2s方式 上游也是302方式 reportType:{} ", reportTypeStr);
             S2SReportResult reportResult = new S2SReportResult("success", String.valueOf(adClick.getId()));
             CommonUtils.writeResponse(resp, JSONObject.toJSONString(reportResult));
         }
         else
         {
-            logger.info("302方式 reportType:{}", reportTypeStr);
-            leagueAbstractService.redirectUrl(req, resp, adApp, adAppMedia, adClick);
+            logger.info("下游方式：{} 上游方式：{}", reportTypeStr, adApp.getReportType());
+            leagueAbstractService.redirectUrl(req, resp, adApp, adAppMedia, adClick, reportTypeStr);
         }
 
         return ;
@@ -159,21 +160,40 @@ public class XQHAdController implements IXQHAdController
         AdAppMedia adAppMedia = adAppMediaMapper.selectByPrimaryKey(adClick.getAppMediaId());
 
 
-        // 选择联盟通道
-        LeagueAbstractService leagueAbstractService = null;
-        try
+        if(adApp.getReportType() == 2)
         {
-            leagueAbstractService = xqhAdService.dispatchLeague(adApp.getLeagueCode(), adApp.getLeagueId());
+            logger.info("跳转地址 上游s2s方式 直接跳转");
+            try
+            {
+                resp.sendRedirect(adApp.getRedirectUrl());
+            } catch (IOException e)
+            {
+                logger.info("跳转异常 e:{}", Throwables.getStackTraceAsString(e));
+                return;
+            }
         }
-        catch (NoLeagueChannelException e)
+        else
         {
-            logger.error("无联盟通道 e:{}", Throwables.getStackTraceAsString(e));
-            CommonUtils.writeResponse(resp, Constant.ERROR_CHANNEL);
+            logger.info("跳转地址 上游302方式 上报并跳转");
+
+            // 选择联盟通道
+            LeagueAbstractService leagueAbstractService = null;
+            try
+            {
+                leagueAbstractService = xqhAdService.dispatchLeague(adApp.getLeagueCode(), adApp.getLeagueId());
+            }
+            catch (NoLeagueChannelException e)
+            {
+                logger.error("无联盟通道 e:{}", Throwables.getStackTraceAsString(e));
+                CommonUtils.writeResponse(resp, Constant.ERROR_CHANNEL);
+                return;
+            }
+
+
+            leagueAbstractService.redirectUrl(req, resp, adApp, adAppMedia, adClick, null);
+
             return;
         }
 
-        leagueAbstractService.redirectUrl(req, resp, adApp, adAppMedia, adClick);
-
-        return;
     }
 }

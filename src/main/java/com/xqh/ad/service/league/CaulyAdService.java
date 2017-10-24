@@ -26,7 +26,7 @@ public class CaulyAdService extends LeagueAbstractService
     private static Logger logger = LoggerFactory.getLogger(CaulyAdService.class);
 
     @Override
-    public void redirectUrl(HttpServletRequest req, HttpServletResponse resp, AdApp adApp, AdAppMedia adAppMedia, AdClick adClick)
+    public void redirectUrl(HttpServletRequest req, HttpServletResponse resp, AdApp adApp, AdAppMedia adAppMedia, AdClick adClick, String reportTypeParam)
     {
         logger.info("Cauly推广url appid:{} url:{}", adApp.getId(), adApp.getLeagueUrl());
 
