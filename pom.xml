@@ -24,7 +24,7 @@
 		<java.version>1.7</java.version>
 
 		<!--hssh-common-->
-		<zkdb.version>0.0.1-SNAPSHOT</zkdb.version>
+		<zkdb.version>0.0.2-SNAPSHOT</zkdb.version>
 		<print.sql.version>0.0.1-SNAPSHOT</print.sql.version>
 		<zkconf.version>0.0.2-SNAPSHOT</zkconf.version>
 
