@@ -34,6 +34,12 @@ public class AdLeagueReportConfig
     private String xqhKey;
 
     /**
+     * 权重 值最小的放在第一位
+     */
+    @Column(name = "weight")
+    private Integer weight;
+
+    /**
      * 备注信息
      */
     private String remark;

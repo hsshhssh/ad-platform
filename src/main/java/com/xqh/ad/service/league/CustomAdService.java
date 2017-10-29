@@ -2,12 +2,10 @@ package com.xqh.ad.service.league;
 
 import com.google.common.base.Throwables;
 import com.xqh.ad.entity.other.HttpResult;
+import com.xqh.ad.service.AdLeagueReportConfigService;
 import com.xqh.ad.tkmapper.entity.*;
 import com.xqh.ad.tkmapper.mapper.AdLeagueMapper;
-import com.xqh.ad.tkmapper.mapper.AdLeagueReportConfigMapper;
 import com.xqh.ad.utils.*;
-import com.xqh.ad.utils.common.ExampleBuilder;
-import com.xqh.ad.utils.common.Search;
 import com.xqh.ad.utils.constant.ReportTypeEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -21,6 +19,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +35,7 @@ public class CustomAdService extends LeagueAbstractService
     private AdLeagueMapper adLeagueMapper;
 
     @Autowired
-    private AdLeagueReportConfigMapper adLeagueReportConfigMapper;
+    private AdLeagueReportConfigService adLeagueReportConfigService;
 
     @Autowired
     private ConfigUtils configUtils;
@@ -105,14 +104,18 @@ public class CustomAdService extends LeagueAbstractService
     public String getUrl(AdApp adApp, AdAppMedia adAppMedia, AdClick adClick, AdLeague adLeague) throws UnsupportedEncodingException
     {
         // 获取key值对应列表
-        Search searchConfig = new Search();
-        searchConfig.put("leagueId_eq", adApp.getLeagueId());
-        List<AdLeagueReportConfig> configList = adLeagueReportConfigMapper.selectByExample(new ExampleBuilder(AdLeagueReportConfig.class).search(searchConfig).build());
+        //Search searchConfig = new Search();
+        //searchConfig.put("leagueId_eq", adApp.getLeagueId());
+        //List<AdLeagueReportConfig> configList = adLeagueReportConfigMapper.selectByExample(new ExampleBuilder(AdLeagueReportConfig.class).search(searchConfig).build());
+
+        List<AdLeagueReportConfig> configList = adLeagueReportConfigService.getByLeagueIdWithSort(adApp.getLeagueId());
 
         // 获取上报地址 原始参数
         String baseHost = UrlUtils.UrlPage(adApp.getLeagueUrl());
-        Map<String, String> params = UrlUtils.URLRequest(adApp.getLeagueUrl());
+        Map<String, String> basicParams = UrlUtils.URLRequest(adApp.getLeagueUrl());
 
+
+        Map<String, String> params = new LinkedHashMap<>(basicParams);
 
         // 获取回调clickId key值 用于生成回调地址（如果需要的话）
         String callbackClickIdKey = null;

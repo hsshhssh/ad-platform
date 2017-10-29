@@ -9,6 +9,7 @@
     <result column="league_id" property="leagueId" jdbcType="INTEGER" />
     <result column="league_key" property="leagueKey" jdbcType="CHAR" />
     <result column="xqh_key" property="xqhKey" jdbcType="CHAR" />
+    <result column="weight" property="weight" jdbcType="INTEGER" />
     <result column="remark" property="remark" jdbcType="CHAR" />
     <result column="create_time" property="createTime" jdbcType="INTEGER" />
     <result column="update_time" property="updateTime" jdbcType="INTEGER" />
