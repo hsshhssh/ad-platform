@@ -115,6 +115,11 @@ public class Constant
     public final static String CALLBACK_TIMESTAMP = "_timestamp";
 
 
+    /**
+     * 固定参数
+     */
+    public final static String FIX_PARAM = "_fixParam";
+
     /////////////////////////////////////////////////////////////////////////
     public final static String SUCC = "success";
     public final static String FAIL = "fail";

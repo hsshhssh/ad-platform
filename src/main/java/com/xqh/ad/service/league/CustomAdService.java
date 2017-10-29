@@ -115,7 +115,7 @@ public class CustomAdService extends LeagueAbstractService
         Map<String, String> basicParams = UrlUtils.URLRequest(adApp.getLeagueUrl());
 
 
-        Map<String, String> params = new LinkedHashMap<>(basicParams);
+        Map<String, String> params = new LinkedHashMap<>();
 
         // 获取回调clickId key值 用于生成回调地址（如果需要的话）
         String callbackClickIdKey = null;
@@ -134,6 +134,22 @@ public class CustomAdService extends LeagueAbstractService
         {
             if(Constant.CALLBACK_CLICK_ID.equals(reportConfig.getXqhKey()))
             {
+                continue;
+            }
+
+
+            // 固定参数
+            if(Constant.FIX_PARAM.equals(reportConfig.getXqhKey()))
+            {
+                if(basicParams.containsKey(reportConfig.getLeagueKey()))
+                {
+                    params.put(reportConfig.getLeagueKey(), basicParams.get(reportConfig.getLeagueKey()));
+                    basicParams.remove(reportConfig.getLeagueKey());
+                }
+                else
+                {
+                    logger.info("配置表中固定参数:{} url中没有配置", reportConfig.getLeagueKey());
+                }
                 continue;
             }
 
@@ -175,6 +191,11 @@ public class CustomAdService extends LeagueAbstractService
             }
 
             params.put(reportConfig.getLeagueKey(), xqhKeyValue);
+        }
+
+        for (String s : basicParams.keySet())
+        {
+            params.put(s, basicParams.get(s));
         }
 
         return CommonUtils.getFullUrl(baseHost, params);
