@@ -129,6 +129,7 @@ public abstract class LeagueAbstractService
             {
                 e.printStackTrace();
             }
+            logger.info("跳转成功");
             return ;
         }
     }
