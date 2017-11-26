@@ -4,6 +4,8 @@ import lombok.Data;
 import org.hssh.common.zkconf.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * Created by hssh on 2017/8/13.
  */
@@ -34,6 +36,9 @@ public class ConfigUtils
 
     @Value(path = "/config/zkconf/ad", key = "ppMediaCode")
     private String ppMediaCode;
+
+    @Value(path = "/config/zkconf/ad", key = "macWithClickIdLeague")
+    private List<String> macWithClickIdLeague;
 
 
 }
