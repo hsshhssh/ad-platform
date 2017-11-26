@@ -1,9 +1,11 @@
 package com.xqh.ad.controller.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.base.Splitter;
 import com.xqh.ad.controller.api.ICustomAdController;
 import com.xqh.ad.entity.other.CallbackResponse;
 import com.xqh.ad.service.XQHAdService;
+import com.xqh.ad.service.league.CustomAdService;
 import com.xqh.ad.tkmapper.entity.AdLeague;
 import com.xqh.ad.tkmapper.entity.AdLeagueReportConfig;
 import com.xqh.ad.tkmapper.mapper.AdLeagueMapper;
@@ -42,6 +44,9 @@ public class CustomAdController implements ICustomAdController
 
     @Autowired
     private XQHAdService xqhAdService;
+
+    @Autowired
+    private CustomAdService customAdService;
 
     @Override
     public void callback(HttpServletRequest req,
@@ -84,6 +89,10 @@ public class CustomAdController implements ICustomAdController
 
         String clickIdStr = req.getParameter(callbackClickIdKey);
 
+
+        // 特殊处理
+        clickIdStr = dealSpecialProcess(enName, clickIdStr);
+
         if(!StringUtils.isNumeric(clickIdStr))
         {
             logger.error("联盟 ：{}  clickId{}不合法 ", adLeague.getName(), clickIdStr);
@@ -96,4 +105,18 @@ public class CustomAdController implements ICustomAdController
         return;
 
     }
+
+
+    private String dealSpecialProcess(String leagueEnName, String clickIdStr)
+    {
+        // mac参数带上clickId
+        if(customAdService.isMacWithClickIdLeague(leagueEnName))
+        {
+            List<String> macClickIdList = Splitter.on(Constant.MAC_CLICKID_SEPARATE).trimResults().omitEmptyStrings().splitToList(clickIdStr);
+            return macClickIdList.get(macClickIdList.size() - 1);
+        }
+
+        return clickIdStr;
+    }
+
 }

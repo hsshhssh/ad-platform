@@ -101,7 +101,7 @@ public class CustomAdService extends LeagueAbstractService
     }
 
 
-    public String getUrl(AdApp adApp, AdAppMedia adAppMedia, AdClick adClick, AdLeague adLeague) throws UnsupportedEncodingException
+    private String getUrl(AdApp adApp, AdAppMedia adAppMedia, AdClick adClick, AdLeague adLeague) throws UnsupportedEncodingException
     {
         // 获取key值对应列表
         //Search searchConfig = new Search();
@@ -198,7 +198,36 @@ public class CustomAdService extends LeagueAbstractService
             params.put(s, basicParams.get(s));
         }
 
+        // 特殊处理
+        dealSpecialLeague(adLeague.getEnName(), params, adClick);
+
         return CommonUtils.getFullUrl(baseHost, params);
+    }
+
+
+    /**
+     * 处理某些联盟的特殊要求
+     */
+    private void dealSpecialLeague(String leagueEnName, Map<String, String> params, AdClick adClick)
+    {
+
+        // mac参数带上clickId
+        if(isMacWithClickIdLeague(leagueEnName))
+        {
+            String mac = params.get(Constant.MAC);
+            mac = mac + Constant.MAC_CLICKID_SEPARATE + adClick.getId();
+            params.put(Constant.MAC, mac);
+            logger.info("联盟：{}需要在mac参数中添加clickId, mac：{}", leagueEnName, mac);
+        }
+
+    }
+
+    public boolean isMacWithClickIdLeague(String leagueEnName)
+    {
+        //String macWithClickIdLeagueStr = configUtils.getMacWithClickIdLeague().trim();
+        //List<String> macWIthClickIdLeagueList = Splitter.on(",").trimResults().omitEmptyStrings().splitToList(macWithClickIdLeagueStr);
+
+        return StringUtils.isNotBlank(leagueEnName) && configUtils.getMacWithClickIdLeague().contains(leagueEnName);
     }
 
 }

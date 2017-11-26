@@ -124,4 +124,16 @@ public class Constant
     public final static String SUCC = "success";
     public final static String FAIL = "fail";
 
+
+    /////////////////////////////////////////////////////////////////////////
+    /**
+     * mac参数常亮
+     */
+    public final static String MAC = "mac";
+
+    /**
+     * mac参数带上clickId的分隔符
+     */
+    public final static String MAC_CLICKID_SEPARATE = "-";
+
 }
