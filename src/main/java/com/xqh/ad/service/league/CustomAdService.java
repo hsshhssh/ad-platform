@@ -168,6 +168,12 @@ public class CustomAdService extends LeagueAbstractService
                 continue;
             }
 
+            if(Constant.REPORT_CLICK_ID.equals(reportConfig.getXqhKey()))
+            {
+                params.put(reportConfig.getLeagueKey(), String.valueOf(adClick.getId()));
+                continue;
+            }
+
             String xqhKeyValue = null;
             Class<?> clazz = adClick.getClass();
             Field field = null;
