@@ -120,6 +120,11 @@ public class Constant
      */
     public final static String FIX_PARAM = "_fixParam";
 
+    /**
+     * 上报url clickId 的key值
+     */
+    public final static String REPORT_CLICK_ID = "_reportClickId";
+
     /////////////////////////////////////////////////////////////////////////
     public final static String SUCC = "success";
     public final static String FAIL = "fail";
