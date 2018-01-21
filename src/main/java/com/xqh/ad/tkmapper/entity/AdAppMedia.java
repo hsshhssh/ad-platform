@@ -56,7 +56,7 @@ public class AdAppMedia {
     private Integer startCount;
 
     /**
-     * 扣量比例
+     * 扣量比例 (实则为回调通过率 不要被名字误解了******)
      */
     @Column(name = "discount_rate")
     private Double discountRate;

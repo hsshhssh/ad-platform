@@ -10,11 +10,13 @@ import com.xqh.ad.utils.common.DozerUtils;
 import com.xqh.ad.utils.common.ExampleBuilder;
 import com.xqh.ad.utils.common.Search;
 import com.xqh.ad.utils.constant.MediaTypeEnum;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +76,8 @@ public class XQHAdService
 
     @Autowired
     private AdPPMediaService adPPMediaService;
+    @Resource
+    private DiscountConfigUtils discountConfigUtils;
 
     /**
      * 根据联盟编码选择Service
@@ -288,15 +292,36 @@ public class XQHAdService
         int diff = curDownloadCount - adAppMedia.getStartCount() + 1;
         int unit = diff % 10;
 
-        if(unit >= (adAppMedia.getDiscountRate() * 10))
+        String discountConfig = discountConfigUtils.getConfig(adAppMedia.getDiscountRate());
+        logger.info("discountConfig:{}", discountConfig);
+        if(StringUtils.isNotBlank(discountConfig) && discountConfig.length() == 10)
         {
-            logger.info("clickId:{} appMediaId:{} 扣量", adClick.getId(), adClick.getAppMediaId());
-            return true;
+            logger.info("扣量计算zk配置化 回调率：{} 配置：{}", adAppMedia.getDiscountRate(), discountConfig);
+            char flag = discountConfig.charAt(unit);
+            if(java.util.Objects.equals('1', flag))
+            {
+                logger.info("第：{}位标识：1 回调 不扣量", unit);
+                return false;
+            }
+            else
+            {
+                logger.info("第：{}为标识：非1 不回调 扣量 flag:{}", unit, flag);
+                return true;
+            }
         }
         else
         {
-            logger.info("clickId:{} appMediaId:{} 不扣量", adClick.getId(), adClick.getAppMediaId());
-            return false;
+            logger.info("扣量计算db配置化 回调率：{}", adAppMedia.getDiscountRate());
+            if(unit >= (adAppMedia.getDiscountRate() * 10))
+            {
+                logger.info("clickId:{} appMediaId:{} 扣量", adClick.getId(), adClick.getAppMediaId());
+                return true;
+            }
+            else
+            {
+                logger.info("clickId:{} appMediaId:{} 不扣量", adClick.getId(), adClick.getAppMediaId());
+                return false;
+            }
         }
 
 
