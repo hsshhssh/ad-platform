@@ -44,7 +44,7 @@ public class Jobs
     @Autowired
     private AdDaySettlementMapper settlementMapper;
 
-    //@Scheduled(cron = "0 30 0 * * ? ")
+    @Scheduled(cron = "0 30 0 * * ? ")
     public void settlement()
     {
         logger.info("广告每日结算开始 nowTime:{}", System.currentTimeMillis());
