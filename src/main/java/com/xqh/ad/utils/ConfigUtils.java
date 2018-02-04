@@ -40,5 +40,7 @@ public class ConfigUtils
     @Value(path = "/config/zkconf/ad", key = "macWithClickIdLeague")
     private List<String> macWithClickIdLeague;
 
+    @Value(path = "/config/zkconf/ad", key = "appMediaBaseHost")
+    private String appMediaBaseHost;
 
 }
