@@ -175,7 +175,8 @@ public class CustomAdService extends LeagueAbstractService
             }
 
             if(Constant.SIGN_37.equals(reportConfig.getXqhKey())) {
-                params.put(reportConfig.getLeagueKey(), CommonUtils.getMd5(basicParams.get("key") + "|" + adClick.getIdfa() + "|" + adClick.getId()).toLowerCase());
+                params.put(reportConfig.getLeagueKey(), CommonUtils.getMd5(basicParams.get("key") + "|" + adClick.getIdfa() + "|" + adClick.getIp()));
+                continue;
             }
 
             String xqhKeyValue = null;
