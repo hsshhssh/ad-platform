@@ -125,6 +125,11 @@ public class Constant
      */
     public final static String REPORT_CLICK_ID = "_reportClickId";
 
+    /**
+     * 三七游戏秘钥
+     */
+    public final static String SIGN_37 = "_sign_37";
+
     /////////////////////////////////////////////////////////////////////////
     public final static String SUCC = "success";
     public final static String FAIL = "fail";
