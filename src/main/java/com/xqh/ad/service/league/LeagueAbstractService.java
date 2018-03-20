@@ -6,6 +6,7 @@ import com.xqh.ad.tkmapper.entity.AdApp;
 import com.xqh.ad.tkmapper.entity.AdAppMedia;
 import com.xqh.ad.tkmapper.entity.AdClick;
 import com.xqh.ad.tkmapper.mapper.AdClickMapper;
+import com.xqh.ad.utils.ClickExtendParamsConfigUtils;
 import com.xqh.ad.utils.CommonUtils;
 import com.xqh.ad.utils.Constant;
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -27,6 +29,8 @@ public abstract class LeagueAbstractService
 
     @Autowired
     private AdClickMapper adClickMapper;
+    @Resource
+    private ClickExtendParamsConfigUtils clickExtendParamsConfigUtils;
 
     /**
      * 获取点击点击实体类
@@ -34,7 +38,6 @@ public abstract class LeagueAbstractService
     public AdClick insertClickRecord(HttpServletRequest req, AdAppMedia adAppMedia, AdApp adApp)
     {
         AdClick adClick = new AdClick();
-
         adClick.setAppMediaId(adAppMedia.getId());
         adClick.setAppId(adApp.getId());
         adClick.setMediaId(adAppMedia.getMediaId());
@@ -46,13 +49,6 @@ public abstract class LeagueAbstractService
         String androidId = req.getParameter("androidId");
         String idfa = req.getParameter("idfa");
         String callback = req.getParameter("callback");
-
-        //if(StringUtils.isBlank(imei) || StringUtils.isBlank(mac) || StringUtils.isBlank(ip))
-        //if(StringUtils.isBlank(ip))
-        //{
-        //    logger.error("请求参数异常 imei:{}  mac:{}  ip:{}", imei, mac, ip);
-        //    throw new RequestParamException("ip异常");
-        //}
 
         if(null != callback && callback.length() > 500)
         {
@@ -66,6 +62,12 @@ public abstract class LeagueAbstractService
         adClick.setIdfa(idfa);
         adClick.setPhoneType(getPhoneType(androidId, idfa));
         adClick.setCallbackUrl(callback);
+
+        // extend_params1
+        String extendParams1Key = clickExtendParamsConfigUtils.getExtendParams1(adAppMedia.getId());
+        if(StringUtils.isNotBlank(extendParams1Key)) {
+            adClick.setExtendParams1(req.getParameter(extendParams1Key));
+        }
 
         int nowTime = (int) (System.currentTimeMillis()/1000);
         adClick.setCreateTime(nowTime);
