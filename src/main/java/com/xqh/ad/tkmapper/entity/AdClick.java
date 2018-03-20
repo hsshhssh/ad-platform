@@ -77,6 +77,12 @@ public class AdClick {
     private String callbackUrl;
 
     /**
+     * 扩展参数1
+     */
+    @Column(name = "extend_params_1")
+    private String extendParams1;
+
+    /**
      * 创建时间
      */
     @Column(name = "create_time")
