@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xqh.ad.tkmapper.mapper.UserChannelDataMapper">
+    <resultMap id="BaseResultMap" type="com.xqh.ad.tkmapper.entity.UserChannelData">
+        <!--
+          WARNING - @mbggenerated
+        -->
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="channel_id" property="channelId" jdbcType="INTEGER"/>
+        <result column="channel_name" property="channelName" jdbcType="CHAR"/>
+        <result column="app_name" property="appName" jdbcType="CHAR"/>
+        <result column="click_amount" property="clickAmount" jdbcType="INTEGER"/>
+        <result column="active_increment" property="activeIncrement" jdbcType="INTEGER"/>
+        <result column="register_increment" property="registerIncrement" jdbcType="INTEGER"/>
+        <result column="recharge_amount" property="rechargeAmount" jdbcType="DECIMAL"/>
+        <result column="people_amount" property="peopleAmount" jdbcType="INTEGER"/>
+        <result column="statistics_date" property="statisticsDate" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="INTEGER"/>
+        <result column="update_time" property="updateTime" jdbcType="INTEGER"/>
+    </resultMap>
+</mapper>
