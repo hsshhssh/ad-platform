@@ -1,5 +1,6 @@
 package com.xqh.account.controller.api;
 
+import com.github.pagehelper.Page;
 import com.xqh.account.controller.impl.IUserController;
 import com.xqh.account.entity.dto.XqhUserCreateDTO;
 import com.xqh.account.entity.dto.XqhUserUpdateDTO;
@@ -10,9 +11,11 @@ import com.xqh.account.tkmapper.entity.XqhUser;
 import com.xqh.account.tkmapper.mapper.XqhUserMapper;
 import com.xqh.ad.exception.ErrorResponseEunm;
 import com.xqh.ad.utils.CommonUtils;
+import com.xqh.ad.utils.common.DozerUtils;
 import com.xqh.ad.utils.common.ExampleBuilder;
 import com.xqh.ad.utils.common.PageResult;
 import com.xqh.ad.utils.common.Search;
+import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -57,7 +61,11 @@ public class UserController implements IUserController
                                            @RequestParam(value = "page", defaultValue = "1") Integer page,
                                            @RequestParam(value = "size", defaultValue = "10") @Max(1000) Integer size)
     {
-        return null;
+        Example example = new ExampleBuilder(XqhUser.class).search(search).sort(Arrays.asList("id_desc")).build();
+
+        Page<XqhUser> payUserList = (Page<XqhUser>) xqhUserMapper.selectByExampleAndRowBounds(example, new RowBounds(page, size));
+
+        return new PageResult<>(payUserList.getTotal(), DozerUtils.mapList(payUserList, XqhUserVO.class));
     }
 
     @Override

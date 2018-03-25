@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.xqh.account.entity.vo.UserInfoVO;
 import com.xqh.account.tkmapper.entity.XqhUser;
 import com.xqh.account.tkmapper.entity.XqhUserRole;
+import com.xqh.account.tkmapper.mapper.XqhUserMapper;
 import com.xqh.account.tkmapper.mapper.XqhUserRoleMapper;
 import com.xqh.ad.utils.common.ExampleBuilder;
 import com.xqh.ad.utils.common.Search;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -22,6 +24,8 @@ public class UserService
 
     @Autowired
     private XqhUserRoleMapper xqhUserRoleMapper;
+    @Resource
+    private XqhUserMapper xqhUserMapper;
 
     /**
      * 获得用户信息对象
@@ -57,4 +61,16 @@ public class UserService
         return userInfoVO;
 
     }
+
+    public XqhUser getUserById(int id)
+    {
+        Search search = new Search();
+        search.put("id_eq", id);
+        Example example = new ExampleBuilder(XqhUser.class).search(search).build();
+
+        List<XqhUser> xqhUserList = xqhUserMapper.selectByExample(example);
+
+        return xqhUserList.size() > 0 ? xqhUserList.get(0) : null;
+    }
+
 }
