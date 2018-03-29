@@ -8,11 +8,13 @@ import com.xqh.ad.controller.api.IUserChannelDataController;
 import com.xqh.ad.entity.dto.UserChannelDataCreateDTO;
 import com.xqh.ad.entity.dto.UserChannelDataDeleteDTO;
 import com.xqh.ad.entity.dto.UserChannelDataUpdateDTO;
+import com.xqh.ad.entity.vo.UserChannelDataSearchVO;
 import com.xqh.ad.entity.vo.UserChannelDataVO;
 import com.xqh.ad.exception.ErrorResponseEunm;
 import com.xqh.ad.tkmapper.entity.UserChannelData;
 import com.xqh.ad.tkmapper.mapper.UserChannelDataMapper;
 import com.xqh.ad.utils.CommonUtils;
+import com.xqh.ad.utils.DoubleUtils;
 import com.xqh.ad.utils.common.DozerUtils;
 import com.xqh.ad.utils.common.ExampleBuilder;
 import com.xqh.ad.utils.common.PageResult;
@@ -29,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by hssh on 2018/3/25.
@@ -44,11 +47,51 @@ public class UserChannelDataController implements IUserChannelDataController
     private UserService userService;
 
     @Override
-    public PageResult<UserChannelDataVO> search(@RequestParam("search") Search search,
-                                                @RequestParam(value = "page", defaultValue = "1") int page,
-                                                @RequestParam(value = "size", defaultValue = "10") int size)
+    public UserChannelDataSearchVO search(@RequestParam("search") Search search,
+                                          @RequestParam(value = "page", defaultValue = "1") int page,
+                                          @RequestParam(value = "size", defaultValue = "10") int size)
     {
+        // 获取列表数据
+        PageResult<UserChannelDataVO> pageResultVO = getPageResultVO(search, page, size);
 
+        // 汇总数据
+        UserChannelDataVO totalVO = getTotalVO(pageResultVO.getList());
+
+        return new UserChannelDataSearchVO(pageResultVO, totalVO);
+    }
+
+    /**
+     * 获取汇总数据
+     */
+    private UserChannelDataVO getTotalVO(List<UserChannelDataVO> voList) {
+        Integer totalClick = 0;
+        Integer totalActive = 0;
+        Integer totalRegister = 0;
+        Double totalRecharge = 0d;
+        Integer totalPeople = 0;
+        for (UserChannelDataVO data : voList)
+        {
+            totalClick += data.getClickAmount();
+            totalActive += data.getClickIncrement();
+            totalRegister += data.getRegisterIncrement();
+            totalRecharge = DoubleUtils.add(data.getRechargeAmount(), totalRecharge);
+            totalPeople += data.getPeopleAmount();
+        }
+
+        UserChannelDataVO totalVO = new UserChannelDataVO();
+        totalVO.setClickAmount(totalClick);
+        totalVO.setClickIncrement(totalActive);
+        totalVO.setRegisterIncrement(totalRegister);
+        totalVO.setRechargeAmount(totalRecharge);
+        totalVO.setPeopleAmount(totalPeople);
+        return totalVO;
+    }
+
+
+    /**
+     * 获取列表和分页数据
+     */
+    private PageResult<UserChannelDataVO> getPageResultVO(Search search, int page, int size) {
         Example example = new ExampleBuilder(UserChannelData.class).search(search).sort(Arrays.asList("statisticsDate_desc")).build();
         Page<UserChannelData> dataPage = (Page<UserChannelData>) userChannelDataMapper.selectByExampleAndRowBounds(example, new RowBounds(page, size));
         return new PageResult<>(dataPage.getTotal(), DozerUtils.mapList(dataPage.getResult(), UserChannelDataVO.class));
