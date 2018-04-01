@@ -10,8 +10,9 @@
         <result column="channel_id" property="channelId" jdbcType="INTEGER"/>
         <result column="channel_name" property="channelName" jdbcType="CHAR"/>
         <result column="app_name" property="appName" jdbcType="CHAR"/>
+        <result column="link_id" property="linkId" jdbcType="CHAR"/>
         <result column="click_amount" property="clickAmount" jdbcType="INTEGER"/>
-        <result column="active_increment" property="activeIncrement" jdbcType="INTEGER"/>
+        <result column="click_increment" property="clickIncrement" jdbcType="INTEGER"/>
         <result column="register_increment" property="registerIncrement" jdbcType="INTEGER"/>
         <result column="recharge_amount" property="rechargeAmount" jdbcType="DECIMAL"/>
         <result column="people_amount" property="peopleAmount" jdbcType="INTEGER"/>

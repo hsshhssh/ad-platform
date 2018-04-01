@@ -8,6 +8,7 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="app_media_id" property="appMediaId" jdbcType="INTEGER" />
     <result column="app_id" property="appId" jdbcType="INTEGER" />
+    <result column="league_id" property="leagueId" jdbcType="INTEGER" />
     <result column="media_id" property="mediaId" jdbcType="INTEGER" />
     <result column="settlement_time" property="settlementTime" jdbcType="INTEGER" />
     <result column="click_count" property="clickCount" jdbcType="INTEGER" />

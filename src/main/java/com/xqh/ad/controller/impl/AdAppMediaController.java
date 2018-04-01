@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
+import java.util.List;
 import java.util.TreeMap;
 
 /**
@@ -122,7 +123,13 @@ public class AdAppMediaController implements IAdAppMediaController
 
         Page<AdAppMedia> appMediaPage = (Page<AdAppMedia>) adAppMediaMapper.selectByExampleAndRowBounds(example, new RowBounds(page, size));
 
-        return new PageResult<>(appMediaPage.getTotal(), DozerUtils.mapList(appMediaPage.getResult(), AdAppMediaVO.class));
+        List<AdAppMediaVO> voList = DozerUtils.mapList(appMediaPage.getResult(), AdAppMediaVO.class);
+        for (AdAppMediaVO adAppMediaVO : voList)
+        {
+            adAppMediaVO.setName(adAppMediaVO.getAppName() + "---" + adAppMediaVO.getMediaName());
+        }
+
+        return new PageResult<>(appMediaPage.getTotal(), voList);
     }
 
     @Override

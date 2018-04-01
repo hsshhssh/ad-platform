@@ -18,9 +18,11 @@ public class UserChannelDataVO
 
     private String appName;
 
+    private String linkId;
+
     private Integer clickAmount;
 
-    private Integer activeIncrement;
+    private Integer clickIncrement;
 
     private Integer registerIncrement;
 

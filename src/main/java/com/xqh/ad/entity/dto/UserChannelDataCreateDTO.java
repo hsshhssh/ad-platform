@@ -20,11 +20,15 @@ public class UserChannelDataCreateDTO
     @Length(max = 50)
     protected String appName;
 
+    @NotBlank(message = "请填写链接id")
+    @Length(max = 50)
+    protected String linkId;
+
     @NotNull(message = "请填写点击量")
     protected Integer clickAmount;
 
-    @NotNull(message = "请填写新增激活量")
-    protected Integer activeIncrement;
+    @NotNull(message = "请填写新增点击量")
+    protected Integer clickIncrement;
 
     @NotNull(message = "请填写新增注册量")
     protected Integer registerIncrement;

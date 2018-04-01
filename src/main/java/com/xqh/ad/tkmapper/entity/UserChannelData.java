@@ -40,16 +40,22 @@ public class UserChannelData
     private String appName;
 
     /**
+     * 链接id
+     */
+    @Column(name = "link_id")
+    private String linkId;
+
+    /**
      * 点击量
      */
     @Column(name = "click_amount")
     private Integer clickAmount;
 
     /**
-     * 新增激活
+     * 新增点击量
      */
-    @Column(name = "active_increment")
-    private Integer activeIncrement;
+    @Column(name = "click_increment")
+    private Integer clickIncrement;
 
     /**
      * 新增注册
