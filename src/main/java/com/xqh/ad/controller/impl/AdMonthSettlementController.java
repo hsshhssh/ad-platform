@@ -127,6 +127,7 @@ public class AdMonthSettlementController implements IAdMonthSettlementController
         adMonthSettlement.setSettlementCallback(dto.getSettlementCallback());
         adMonthSettlement.setUpstreamPrice(dto.getUpstreamPrice());
         adMonthSettlement.setDownstreamPrice(dto.getDownstreamPrice());
+        adMonthSettlement.setIsConfirm(1);
 
         // 计算差价利润
         double diff = DoubleUtils.sub(dto.getDownstreamPrice(), dto.getUpstreamPrice());

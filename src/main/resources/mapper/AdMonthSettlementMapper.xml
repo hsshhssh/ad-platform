@@ -22,6 +22,7 @@
     <result column="diff_profit" property="diffProfit" jdbcType="DECIMAL" />
     <result column="skip_profit" property="skipProfit" jdbcType="DECIMAL" />
     <result column="total_profit" property="totalProfit" jdbcType="DECIMAL" />
+    <result column="is_confirm" property="isConfirm" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="INTEGER" />
     <result column="update_time" property="updateTime" jdbcType="INTEGER" />
   </resultMap>
