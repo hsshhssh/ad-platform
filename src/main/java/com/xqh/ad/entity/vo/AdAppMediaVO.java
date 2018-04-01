@@ -22,4 +22,5 @@ public class AdAppMediaVO
 
     private String appName;
     private String mediaName;
+    private String name;
 }

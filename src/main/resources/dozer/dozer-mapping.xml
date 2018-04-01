@@ -43,7 +43,43 @@
             <a>reportType</a>
             <b>reportTypeStr</b>
         </field>
+    </mapping>
 
+    <mapping>
+        <class-a>com.xqh.ad.tkmapper.entity.AdMonthSettlement</class-a>
+        <class-b>com.xqh.ad.entity.vo.AdMonthSettlementVO</class-b>
+        <field>
+            <a>appId</a>
+            <b>appId</b>
+        </field>
+        <field custom-converter="com.xqh.ad.utils.converter.DozerAppIdToNameConverter">
+            <a>appId</a>
+            <b>appName</b>
+        </field>
+        <field>
+            <a>mediaId</a>
+            <b>mediaId</b>
+        </field>
+        <field custom-converter="com.xqh.ad.utils.converter.DozerMediaIdToNameConverter">
+            <a>mediaId</a>
+            <b>mediaName</b>
+        </field>
+        <field>
+            <a>leagueId</a>
+            <b>leagueId</b>
+        </field>
+        <field custom-converter="com.xqh.ad.utils.converter.DozerLeagueIdToNameConverter">
+            <a>leagueId</a>
+            <b>leagueName</b>
+        </field>
+        <field>
+            <a>source</a>
+            <b>source</b>
+        </field>
+        <field custom-converter="com.xqh.ad.utils.converter.DozerSettlementSourceToNameConverter">
+            <a>source</a>
+            <b>sourceName</b>
+        </field>
     </mapping>
 
 </mappings>

@@ -27,6 +27,13 @@ public class AdDaySettlement {
     private Integer appId;
 
     /**
+     * 联盟id
+     */
+    @Column(name = "league_id")
+    private Integer leagueId;
+
+
+    /**
      * 媒体id
      */
     @Column(name = "media_id")

@@ -3,23 +3,17 @@ package com.xqh.ad.utils;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
-import com.xqh.ad.tkmapper.entity.AdAppMedia;
-import com.xqh.ad.tkmapper.entity.AdClick;
-import com.xqh.ad.tkmapper.entity.AdDaySettlement;
-import com.xqh.ad.tkmapper.entity.AdDownload;
-import com.xqh.ad.tkmapper.mapper.AdAppMediaMapper;
-import com.xqh.ad.tkmapper.mapper.AdClickMapper;
-import com.xqh.ad.tkmapper.mapper.AdDaySettlementMapper;
-import com.xqh.ad.tkmapper.mapper.AdDownloadMapper;
+import com.xqh.ad.tkmapper.entity.*;
+import com.xqh.ad.tkmapper.mapper.*;
 import com.xqh.ad.utils.common.ExampleBuilder;
 import com.xqh.ad.utils.common.Search;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -34,15 +28,14 @@ public class Jobs
 
     @Autowired
     private AdClickMapper adClickMapper;
-
     @Autowired
     private AdDownloadMapper adDownloadMapper;
-
     @Autowired
     private AdAppMediaMapper adAppMediaMapper;
-
     @Autowired
     private AdDaySettlementMapper settlementMapper;
+    @Resource
+    private AdAppMapper adAppMapper;
 
     //@Scheduled(cron = "0 30 0 * * ? ")
     public void settlement()
@@ -63,10 +56,12 @@ public class Jobs
         {
             AdAppMedia adAppMedia = adAppMediaMapper.selectByPrimaryKey(appMediaId);
             if(adAppMedia == null) continue;
+            AdApp adApp = adAppMapper.selectByPrimaryKey(adAppMedia.getAppId());
 
             AdDaySettlement settlement = new AdDaySettlement();
             settlement.setAppMediaId(appMediaId);
             settlement.setAppId(adAppMedia.getAppId());
+            settlement.setLeagueId(adApp.getLeagueId());
             settlement.setMediaId(adAppMedia.getMediaId());
             settlement.setSettlementTime(settlementTime);
             settlement.setClickCount(clickMap.get(appMediaId) == null ? 0 : clickMap.get(appMediaId));
