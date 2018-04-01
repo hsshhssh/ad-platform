@@ -21,7 +21,6 @@ import com.xqh.ad.utils.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -56,8 +55,7 @@ public class XQHAdController implements IXQHAdController
     private AdAppMediaMapper adAppMediaMapper;
 
     @Override
-    @Transactional
-    public void url(HttpServletRequest req, HttpServletResponse resp, String urlCode)
+    public void url(HttpServletRequest req, HttpServletResponse resp, @PathVariable("urlCode") String urlCode)
     {
         // 判断是否在黑名单内
         if(configUtils.getUrlCodeBlackList().contains(urlCode))
