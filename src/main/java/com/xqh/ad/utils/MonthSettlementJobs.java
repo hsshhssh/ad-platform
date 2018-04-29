@@ -11,6 +11,7 @@ import com.xqh.ad.utils.common.ExampleBuilder;
 import com.xqh.ad.utils.common.Search;
 import com.xqh.ad.utils.constant.MonthSettlementSourceEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import tk.mybatis.mapper.entity.Example;
 
@@ -32,7 +33,7 @@ public class MonthSettlementJobs
     @Resource
     private AdMonthSettlementMapper adMonthSettlementMapper;
 
-    //@Scheduled(cron = "0 40 0 1 * ?")
+    @Scheduled(cron = "0 40 0 1 * ?")
     public void settlement() {
         long nowTime = System.currentTimeMillis() / 1000;
         log.info("每月结算自动任务开始 当前时间={}", nowTime);
