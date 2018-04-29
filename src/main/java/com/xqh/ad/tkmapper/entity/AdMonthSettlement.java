@@ -110,6 +110,12 @@ public class AdMonthSettlement {
     protected Double totalProfit;
 
     /**
+     * 已确认 0-未确认 1-已确认
+     */
+    @Column(name = "is_confirm")
+    protected Integer isConfirm;
+
+    /**
      * 创建时间
      */
     @Column(name = "create_time")
