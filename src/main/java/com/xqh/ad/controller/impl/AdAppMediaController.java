@@ -1,5 +1,6 @@
 package com.xqh.ad.controller.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.google.common.collect.Maps;
 import com.xqh.ad.controller.api.IAdAppMediaController;
@@ -80,11 +81,19 @@ public class AdAppMediaController implements IAdAppMediaController
             return 0;
         }
 
+        // 校验扣量初始值 回调率
+        ErrorResponseEunm errorResponseEunm = validateStartCountAndDiscountRate(dto.getStartCount(), dto.getDiscountRate());
+        if (null != errorResponseEunm) {
+            logger.error("校验不通过 req:{}", JSON.toJSON(dto));
+            CommonUtils.sendError(resp, errorResponseEunm);
+            return 0;
+        }
+
         adAppMedia.setMediaCode(adMedia.getCode());
         adAppMedia.setUrlCode(adAppMediaService.getUrlCode(adApp.getId(), adMedia.getId()));
         adAppMedia.setUrl(configUtils.getAppMediaBaseHost() + "/xqh/ad/" + adAppMediaService.getUrlCode(adApp.getId(), adMedia.getId()));
-        adAppMedia.setStartCount(Integer.valueOf(configUtils.getDefaultStartCount()));
-        adAppMedia.setDiscountRate(Double.valueOf(configUtils.getDefaultDiscountRate()));
+        adAppMedia.setStartCount(getStartCount(dto.getStartCount()));
+        adAppMedia.setDiscountRate(getDiscountRate(dto.getDiscountRate()));
         int nowTime = (int) (System.currentTimeMillis()/1000);
         adAppMedia.setCreateTime(nowTime);
         adAppMedia.setUpdateTime(nowTime);
@@ -104,8 +113,17 @@ public class AdAppMediaController implements IAdAppMediaController
     }
 
     @Override
-    public int update(@RequestBody @Valid @NotNull AdAppMediaUpdateDTO dto)
+    public int update(@RequestBody @Valid @NotNull AdAppMediaUpdateDTO dto,
+                      HttpServletResponse resp)
     {
+        ErrorResponseEunm errorResponseEunm = validateStartCountAndDiscountRate(dto.getStartCount(), dto.getDiscountRate());
+        if (null != errorResponseEunm)
+        {
+            logger.error("校验不通过 req:{}", JSON.toJSON(dto));
+            CommonUtils.sendError(resp, errorResponseEunm);
+            return 0;
+        }
+
         AdAppMedia adAppMedia = DozerUtils.map(dto, AdAppMedia.class);
 
         adAppMedia.setUpdateTime((int) (System.currentTimeMillis()/1000));
@@ -113,6 +131,45 @@ public class AdAppMediaController implements IAdAppMediaController
         return adAppMediaMapper.updateByPrimaryKeySelective(adAppMedia);
 
     }
+
+    private Integer getStartCount(Integer startCount) {
+        return startCount == null ? Integer.valueOf(configUtils.getDefaultStartCount()) : startCount;
+    }
+
+    private Double getDiscountRate(Double discountRate) {
+        return discountRate == null ? Double.valueOf(configUtils.getDefaultDiscountRate()) : discountRate;
+    }
+
+    private ErrorResponseEunm validateStartCountAndDiscountRate(Integer startCount, Double DiscountRate) {
+        if (startCount != null && startCount < 0)
+        {
+            logger.info("扣量初始值不能为负数 startCount:{}", startCount);
+            return ErrorResponseEunm.INVALID_START_COUNT;
+        }
+
+        Double d = 1.1;
+        List<Double> discountRateList = Arrays.asList(
+                Double.valueOf(0),
+                Double.valueOf(0.1),
+                Double.valueOf(0.2),
+                Double.valueOf(0.3),
+                Double.valueOf(0.4),
+                Double.valueOf(0.5),
+                Double.valueOf(0.6),
+                Double.valueOf(0.7),
+                Double.valueOf(0.8),
+                Double.valueOf(0.9),
+                Double.valueOf(1));
+        if (DiscountRate != null && !discountRateList.contains(DiscountRate))
+        {
+            logger.info("回调率不合法 discountRate:{}", DiscountRate);
+            return ErrorResponseEunm.INVALID_DISCOUNT_RATE;
+        }
+
+
+        return null;
+    }
+
 
     @Override
     public PageResult<AdAppMediaVO> search(@RequestParam("search") Search search,

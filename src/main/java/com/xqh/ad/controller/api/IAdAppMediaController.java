@@ -23,8 +23,8 @@ public interface IAdAppMediaController
 
 
     @PostMapping
-    public int update(@RequestBody @Valid @NotNull AdAppMediaUpdateDTO dto);
-
+    public int update(@RequestBody @Valid @NotNull AdAppMediaUpdateDTO dto,
+                      HttpServletResponse resp);
 
     @RequestMapping("search")
     public PageResult<AdAppMediaVO> search(@RequestParam("search") Search search,
