@@ -21,4 +21,14 @@ public class AdAppMediaCreateDTO
     @NotBlank
     private String appKey;
 
+    /**
+     * 扣量初始值
+     */
+    private Integer startCount;
+
+    /**
+     * 回调率
+     */
+    private Double discountRate;
+
 }

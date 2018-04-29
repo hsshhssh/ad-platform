@@ -16,6 +16,8 @@ public enum ErrorResponseEunm
     INVALID_APPID(40007, "无效appId"),
     INVALID_S2S_PARAM(40008, "s2s方式必须填写下载跳转地址"),
     DUPLICATE_LEAGUE_EN_NAME(40009, "重复联盟英文名"),
+    INVALID_START_COUNT(40010, "扣量初始值不能为负数"),
+    INVALID_DISCOUNT_RATE(40011, "回调率只能为[0,1],步长为0.1")
     ;
 
 
