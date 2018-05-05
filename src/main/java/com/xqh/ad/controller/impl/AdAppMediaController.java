@@ -2,11 +2,16 @@ package com.xqh.ad.controller.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.xqh.ad.controller.api.IAdAppMediaController;
 import com.xqh.ad.entity.dto.AdAppMediaCreateDTO;
 import com.xqh.ad.entity.dto.AdAppMediaUpdateDTO;
+import com.xqh.ad.entity.dto.TestReportUrlDTO;
 import com.xqh.ad.entity.vo.AdAppMediaVO;
+import com.xqh.ad.entity.vo.AdTestIdfaVO;
+import com.xqh.ad.entity.vo.TestReportUrlVO;
+import com.xqh.ad.entity.vo.TestReportVO;
 import com.xqh.ad.exception.ErrorResponseEunm;
 import com.xqh.ad.service.AdAppMediaService;
 import com.xqh.ad.tkmapper.entity.AdApp;
@@ -17,6 +22,7 @@ import com.xqh.ad.tkmapper.mapper.AdAppMediaMapper;
 import com.xqh.ad.tkmapper.mapper.AdMediaMapper;
 import com.xqh.ad.utils.CommonUtils;
 import com.xqh.ad.utils.ConfigUtils;
+import com.xqh.ad.utils.TestIdfaConfigUtils;
 import com.xqh.ad.utils.TestParamConfigUtils;
 import com.xqh.ad.utils.common.DozerUtils;
 import com.xqh.ad.utils.common.ExampleBuilder;
@@ -49,19 +55,14 @@ public class AdAppMediaController implements IAdAppMediaController
 
     @Autowired
     private AdAppMediaMapper adAppMediaMapper;
-
     @Autowired
     private AdAppMapper adAppMapper;
-
     @Autowired
     private AdMediaMapper adMediaMapper;
-
     @Autowired
     private AdAppMediaService adAppMediaService;
-
     @Autowired
     private ConfigUtils configUtils;
-
     @Autowired
     private TestParamConfigUtils testParamConfigUtils;
 
@@ -183,10 +184,15 @@ public class AdAppMediaController implements IAdAppMediaController
         List<AdAppMediaVO> voList = DozerUtils.mapList(appMediaPage.getResult(), AdAppMediaVO.class);
         for (AdAppMediaVO adAppMediaVO : voList)
         {
-            adAppMediaVO.setName(adAppMediaVO.getAppName() + "---" + adAppMediaVO.getMediaName());
+            adAppMediaVO.setName(getAppMediaName(adAppMediaVO));
         }
 
         return new PageResult<>(appMediaPage.getTotal(), voList);
+    }
+
+    private String getAppMediaName(AdAppMediaVO adAppMediaVO)
+    {
+        return adAppMediaVO.getAppName() + "---" + adAppMediaVO.getMediaName();
     }
 
     @Override
@@ -200,16 +206,72 @@ public class AdAppMediaController implements IAdAppMediaController
             return null;
         }
 
+        return getReportUrl(adAppMedia, testParamConfigUtils.getIp().trim(), testParamConfigUtils.getIdfa().trim());
+
+    }
+
+    private String getReportUrl(AdAppMedia adAppMedia, String ip, String idfa)
+    {
         String host = testParamConfigUtils.getHost().trim() + adAppMedia.getUrlCode();
 
         TreeMap<String, String> params = Maps.newTreeMap();
 
         params.put("key", adAppMedia.getAppKey());
-        params.put("ip", testParamConfigUtils.getIp().trim());
-        params.put("idfa", testParamConfigUtils.getIdfa().trim());
+        params.put("ip", ip);
+        params.put("idfa", idfa);
         params.put("callback", testParamConfigUtils.getCallback().trim());
 
         return CommonUtils.getFullUrl(host, params);
+    }
 
+    @Override
+    public TestReportVO getTestReportData()
+    {
+        TestReportVO testReportVO = new TestReportVO();
+
+        // idfa列表
+        List<AdTestIdfaVO> idfaList = TestIdfaConfigUtils.getList();
+        if (null == idfaList)
+        {
+            idfaList = Lists.newArrayList();
+        }
+        PageResult<AdTestIdfaVO> idfaPageResult = new PageResult<>(idfaList.size(), idfaList);
+        testReportVO.setIdfaPageResult(idfaPageResult);
+
+        // 默认ip
+        testReportVO.setDefalutIP(testParamConfigUtils.getIp().trim());
+
+        // 推广应用
+        Search search = new Search();
+        search.put("mediaId_eq", 1); // 测试媒体
+        Example example = new ExampleBuilder(AdAppMedia.class).search(search).sort(Arrays.asList("id_desc")).build();
+        Page<AdAppMedia> appMediaPage = (Page<AdAppMedia>) adAppMediaMapper.selectByExampleAndRowBounds(example, new RowBounds(0, 500));
+        List<AdAppMediaVO> voList = DozerUtils.mapList(appMediaPage.getResult(), AdAppMediaVO.class);
+        for (AdAppMediaVO adAppMediaVO : voList)
+        {
+            adAppMediaVO.setName(getAppMediaName(adAppMediaVO));
+        }
+        PageResult<AdAppMediaVO> appMediaPageResult = new PageResult<>(appMediaPage.getTotal(), voList);
+        testReportVO.setAppMediaPageResult(appMediaPageResult);
+
+        return testReportVO;
+    }
+
+    @Override
+    public TestReportUrlVO getTestReportUrl(@RequestBody @Valid @NotNull TestReportUrlDTO dto,
+                                      HttpServletResponse resp)
+    {
+        AdAppMedia adAppMedia = adAppMediaMapper.selectByPrimaryKey(dto.getAppMediaId());
+
+        if(null == adAppMedia)
+        {
+            CommonUtils.sendError(resp, ErrorResponseEunm.INVALID_APPID);
+            return null;
+        }
+
+        String reportUrl = getReportUrl(adAppMedia, dto.getIp(), dto.getIdfa());
+        TestReportUrlVO testReportUrlVO = new TestReportUrlVO();
+        testReportUrlVO.setUrl(reportUrl);
+        return testReportUrlVO;
     }
 }
