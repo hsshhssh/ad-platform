@@ -2,7 +2,10 @@ package com.xqh.ad.controller.api;
 
 import com.xqh.ad.entity.dto.AdAppMediaCreateDTO;
 import com.xqh.ad.entity.dto.AdAppMediaUpdateDTO;
+import com.xqh.ad.entity.dto.TestReportUrlDTO;
 import com.xqh.ad.entity.vo.AdAppMediaVO;
+import com.xqh.ad.entity.vo.TestReportUrlVO;
+import com.xqh.ad.entity.vo.TestReportVO;
 import com.xqh.ad.utils.common.PageResult;
 import com.xqh.ad.utils.common.Search;
 import org.springframework.web.bind.annotation.*;
@@ -33,5 +36,12 @@ public interface IAdAppMediaController
 
     @GetMapping("test/url")
     public String getTestUrl(@RequestParam("id") int id, HttpServletResponse resp);
+
+    @GetMapping("test/report/data")
+    public TestReportVO getTestReportData();
+
+    @PostMapping("test/report/url")
+    public TestReportUrlVO getTestReportUrl(@RequestBody @Valid @NotNull TestReportUrlDTO dto,
+                                      HttpServletResponse resp);
 
 }
