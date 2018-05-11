@@ -3,10 +3,13 @@ package com.xqh.ad.controller.demo;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.xqh.ad.mq.producer.TestProducer;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -21,6 +24,9 @@ import java.util.Map;
 @RequestMapping("demo")
 public class DemoController
 {
+    @Resource
+    private TestProducer testProducer;
+
     @GetMapping("tencent")
     public void tencent(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String host = "http://ac.o2.qq.com/php/mbclick.php";
@@ -50,6 +56,10 @@ public class DemoController
         resp.sendRedirect(url);
     }
 
-
+    @GetMapping("rabbit/test")
+    public void rabbitTest(@RequestParam(value = "msg") String msg)
+    {
+        testProducer.send(msg);
+    }
 
 }
