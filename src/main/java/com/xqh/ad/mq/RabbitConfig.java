@@ -11,9 +11,19 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitConfig
 {
 
+    /**
+     * 蹭量消息队列
+     */
+    public static final String FREELOAD_MQ = "freeload_mq";
+
     @Bean
     public Queue testQueue() {
         return new Queue("test");
+    }
+
+    @Bean
+    public Queue freeloadQueue() {
+        return new Queue(FREELOAD_MQ);
     }
 
 }

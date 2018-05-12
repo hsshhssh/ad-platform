@@ -1,5 +1,6 @@
 package com.xqh.ad.service.league;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.base.Throwables;
 import com.xqh.ad.entity.other.HttpResult;
 import com.xqh.ad.service.AdLeagueReportConfigService;
@@ -46,11 +47,11 @@ public class CustomAdService extends LeagueAbstractService
 
         if(null == adLeague)
         {
-            logger.info("leagueId:{} 无配置联盟信息");
+            logger.info("leagueId:{} 无配置联盟信息", leagueId);
             return false;
         }
 
-        logger.info("leagueId:{} 有配置联盟信息 联盟通道:{}", adLeague);
+        logger.info("leagueId:{} 有配置联盟信息 联盟通道:{}", leagueId, JSON.toJSON(adLeague));
         return true;
     }
 
@@ -61,7 +62,7 @@ public class CustomAdService extends LeagueAbstractService
 
         try
         {
-            String reportUrl = getUrl(adApp, adAppMedia, adClick, adLeague); // 上报地址
+            String reportUrl = getUrl(adApp, adClick, adLeague); // 上报地址
             String redirectUrl = null; // 下载跳转地址
             if(StringUtils.isBlank(reportUrl))
             {
@@ -101,12 +102,8 @@ public class CustomAdService extends LeagueAbstractService
     }
 
 
-    private String getUrl(AdApp adApp, AdAppMedia adAppMedia, AdClick adClick, AdLeague adLeague) throws UnsupportedEncodingException
+    public String getUrl(AdApp adApp, AdClick adClick, AdLeague adLeague) throws UnsupportedEncodingException
     {
-        // 获取key值对应列表
-        //Search searchConfig = new Search();
-        //searchConfig.put("leagueId_eq", adApp.getLeagueId());
-        //List<AdLeagueReportConfig> configList = adLeagueReportConfigMapper.selectByExample(new ExampleBuilder(AdLeagueReportConfig.class).search(searchConfig).build());
 
         List<AdLeagueReportConfig> configList = adLeagueReportConfigService.getByLeagueIdWithSort(adApp.getLeagueId());
 
@@ -216,6 +213,8 @@ public class CustomAdService extends LeagueAbstractService
     }
 
 
+
+
     /**
      * 处理某些联盟的特殊要求
      */
@@ -235,9 +234,6 @@ public class CustomAdService extends LeagueAbstractService
 
     public boolean isMacWithClickIdLeague(String leagueEnName)
     {
-        //String macWithClickIdLeagueStr = configUtils.getMacWithClickIdLeague().trim();
-        //List<String> macWIthClickIdLeagueList = Splitter.on(",").trimResults().omitEmptyStrings().splitToList(macWithClickIdLeagueStr);
-
         return StringUtils.isNotBlank(leagueEnName) && configUtils.getMacWithClickIdLeague().contains(leagueEnName);
     }
 

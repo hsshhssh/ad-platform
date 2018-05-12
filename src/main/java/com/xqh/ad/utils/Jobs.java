@@ -7,9 +7,12 @@ import com.xqh.ad.tkmapper.entity.*;
 import com.xqh.ad.tkmapper.mapper.*;
 import com.xqh.ad.utils.common.ExampleBuilder;
 import com.xqh.ad.utils.common.Search;
+import com.xqh.ad.utils.condition.JobsCondition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Conditional;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import tk.mybatis.mapper.entity.Example;
 
@@ -22,6 +25,7 @@ import java.util.Map;
  * Created by hssh on 2017/5/13.
  */
 @Component
+@Conditional(JobsCondition.class)
 public class Jobs
 {
     private static Logger logger = LoggerFactory.getLogger(Jobs.class);
@@ -37,7 +41,7 @@ public class Jobs
     @Resource
     private AdAppMapper adAppMapper;
 
-    //@Scheduled(cron = "0 30 0 * * ? ")
+    @Scheduled(cron = "0 30 0 * * ? ")
     public void settlement()
     {
         logger.info("广告每日结算开始 nowTime:{}", System.currentTimeMillis());

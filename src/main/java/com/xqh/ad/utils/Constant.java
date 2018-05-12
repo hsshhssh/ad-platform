@@ -146,4 +146,11 @@ public class Constant
      */
     public final static String MAC_CLICKID_SEPARATE = "-";
 
+
+    //////////////////////////////////////////////////////////////////////////
+    /**
+     * 编译通过条件常量
+     */
+    public final static String CONDITION_PASS_FLAG = "pass";
+
 }
