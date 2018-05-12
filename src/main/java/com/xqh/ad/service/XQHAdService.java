@@ -1,7 +1,9 @@
 package com.xqh.ad.service;
 
 import com.google.common.base.Throwables;
+import com.xqh.ad.entity.other.FreeloadMqDTO;
 import com.xqh.ad.exception.NoLeagueChannelException;
+import com.xqh.ad.mq.producer.FreeloadMqProducer;
 import com.xqh.ad.service.league.*;
 import com.xqh.ad.tkmapper.entity.*;
 import com.xqh.ad.tkmapper.mapper.*;
@@ -15,9 +17,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -31,53 +35,42 @@ public class XQHAdService
 
     @Autowired
     private ReYunAdService reYunAdService;
-
     @Autowired
     private TencentAdService tencentAdService;
-
     @Autowired
     private YouMengAdService youMengAdService;
-
     @Autowired
     private AdClickMapper adClickMapper;
-
     @Autowired
     private AdDownloadMapper adDownloadMapper;
-
     @Autowired
     private AsyncUtils asyncUtils;
-
     @Autowired
     private AdAppMediaMapper adAppMediaMapper;
-
     @Autowired
     private DaoYouDaoAdService daoYouDaoAdService;
-
     @Autowired
     private RuiShiAdService ruiShiAdService;
-
     @Autowired
     private CaulyAdService caulyAdService;
-
     @Autowired
     private VirtualAdService virtualAdService;
-
     @Autowired
     private CustomAdService customAdService;
-
     @Autowired
     private AdMediaMapper adMediaMapper;
-
     @Autowired
     private AdMediaCallbackConfigMapper adMediaCallbackConfigMapper;
-
     @Autowired
     private ConfigUtils configUtils;
-
     @Autowired
     private AdPPMediaService adPPMediaService;
     @Resource
     private DiscountConfigUtils discountConfigUtils;
+    @Resource
+    private AdFreeloadRelateMapper adFreeloadRelateMapper;
+    @Resource
+    private FreeloadMqProducer freeloadMqProducer;
 
     /**
      * 根据联盟编码选择Service
@@ -132,7 +125,6 @@ public class XQHAdService
         }
 
     }
-
 
     /**
      * 回调处理
@@ -226,7 +218,6 @@ public class XQHAdService
         throw new RuntimeException("参数异常");
     }
 
-
     private String getValueByReflect(AdClick adClick, String key)
     {
         String xqhKeyValue;
@@ -253,9 +244,6 @@ public class XQHAdService
 
         return xqhKeyValue;
     }
-
-
-
 
     /**
      * 判断是否需要扣量
@@ -327,5 +315,24 @@ public class XQHAdService
 
     }
 
+    /**
+     * 蹭量处理：发送蹭量消息
+     */
+    public boolean handleFreeload(AdClick adClick, Integer sourceAppMediaId) {
+        Search search = new Search();
+        search.put("sourceAppMediaId_eq", sourceAppMediaId);
+        Example example = new ExampleBuilder(AdFreeloadRelate.class).search(search).sort(Arrays.asList("id_desc")).build();
+        List<AdFreeloadRelate> adFreeloadRelateList = adFreeloadRelateMapper.selectByExample(example);
+        logger.info("蹭量消息数量：{}", adFreeloadRelateList.size());
+        for (AdFreeloadRelate freeloadRelate : adFreeloadRelateList)
+        {
+            FreeloadMqDTO freeloadMqDTO = new FreeloadMqDTO();
+            freeloadMqDTO.setSourceAppMediaId(sourceAppMediaId);
+            freeloadMqDTO.setDestAppMediaId(freeloadRelate.getDestAppMediaId());
+            freeloadMqDTO.setSourceAdClick(adClick);
+            freeloadMqProducer.send(freeloadMqDTO);
+        }
+        return true;
+    }
 
 }

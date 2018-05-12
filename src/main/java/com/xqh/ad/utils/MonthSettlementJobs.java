@@ -9,8 +9,10 @@ import com.xqh.ad.tkmapper.mapper.AdDaySettlementMapper;
 import com.xqh.ad.tkmapper.mapper.AdMonthSettlementMapper;
 import com.xqh.ad.utils.common.ExampleBuilder;
 import com.xqh.ad.utils.common.Search;
+import com.xqh.ad.utils.condition.JobsCondition;
 import com.xqh.ad.utils.constant.MonthSettlementSourceEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import tk.mybatis.mapper.entity.Example;
@@ -25,6 +27,7 @@ import java.util.List;
  */
 @Component
 @Slf4j
+@Conditional(JobsCondition.class)
 public class MonthSettlementJobs
 {
 

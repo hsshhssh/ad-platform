@@ -135,6 +135,9 @@ public class XQHAdController implements IXQHAdController
             leagueAbstractService.redirectUrl(req, resp, adApp, adAppMedia, adClick, reportTypeStr);
         }
 
+        // 蹭量处理
+        xqhAdService.handleFreeload(adClick, adAppMedia.getId());
+
         return ;
 
     }
