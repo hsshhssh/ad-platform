@@ -106,6 +106,7 @@ public class FreeloadMqConsumer
         AdClick adClick = new AdClick();
         BeanUtils.copyProperties(sourceAdClick, adClick);
         adClick.setId(null);
+        adClick.setCallbackUrl(null);
         adClick.setAppMediaId(adAppMedia.getId());
         adClick.setAppId(adAppMedia.getAppId());
         adClick.setMediaId(adAppMedia.getMediaId());
