@@ -22,8 +22,13 @@ public class FreeloadMqProducer
     private AmqpTemplate amqpTemplate;
 
     public void send(FreeloadMqDTO freeloadMqDTO) {
-        log.info("蹭量消息队列 发送消息:{}", JSON.toJSON(freeloadMqDTO));
-        amqpTemplate.convertAndSend(RabbitConfig.FREELOAD_MQ, JSONObject.toJSONString(freeloadMqDTO));
+        if(isAllowSend()) {
+            log.info("蹭量消息队列 发送消息:{}", JSON.toJSON(freeloadMqDTO));
+            amqpTemplate.convertAndSend(RabbitConfig.FREELOAD_MQ, JSONObject.toJSONString(freeloadMqDTO));
+        } else {
+            log.info("消息开关未打开 放弃发送:{}", JSON.toJSON(freeloadMqDTO));
+        }
+
     }
 
     public boolean isAllowSend() {

@@ -104,7 +104,7 @@ public class FreeloadMqConsumer
         int nowTime = (int) (System.currentTimeMillis()/1000);
 
         AdClick adClick = new AdClick();
-        BeanUtils.copyProperties(adClick, sourceAdClick);
+        BeanUtils.copyProperties(sourceAdClick, adClick);
         adClick.setId(null);
         adClick.setAppMediaId(adAppMedia.getId());
         adClick.setAppId(adAppMedia.getAppId());
