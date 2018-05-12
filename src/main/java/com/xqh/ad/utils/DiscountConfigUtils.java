@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
 @Data
 public class DiscountConfigUtils
 {
+    @Value(path = "/config/zkconf/ad_discount.conf", key = "0.0")
+    private String _00;
+
     @Value(path = "/config/zkconf/ad_discount.conf", key = "0.1")
     private String _10;
 
@@ -48,6 +51,9 @@ public class DiscountConfigUtils
         String config = "";
         switch (di)
         {
+            case 0:
+                config = this._00;
+                break;
             case 1:
                 config = this._10;
                 break;
