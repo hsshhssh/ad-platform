@@ -24,6 +24,7 @@ import com.xqh.ad.utils.common.Search;
 import com.xqh.ad.utils.constant.MonthSettlementSourceEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,7 +51,7 @@ public class AdMonthSettlementController implements IAdMonthSettlementController
     private AdAppMediaMapper adAppMediaMapper;
     @Resource
     private AdAppMapper adAppMapper;
-    @Resource
+    @Autowired(required = false)
     private MonthSettlementJobs monthSettlementJobs;
 
     @Override
