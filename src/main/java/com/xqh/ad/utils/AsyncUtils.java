@@ -43,4 +43,10 @@ public class AsyncUtils
 
     }
 
+    @Async
+    public void report(String reportUrl) {
+        HttpResult httpResult = HttpUtils.get(reportUrl);
+        logger.info("蹭量上报地址：{} 返回值状态码:{}", reportUrl, httpResult.getStatus());
+    }
+
 }

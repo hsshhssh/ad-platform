@@ -3,7 +3,6 @@ package com.xqh.ad.mq.consumer;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.xqh.ad.entity.other.FreeloadMqDTO;
-import com.xqh.ad.entity.other.HttpResult;
 import com.xqh.ad.mq.RabbitConfig;
 import com.xqh.ad.service.league.CustomAdService;
 import com.xqh.ad.tkmapper.entity.AdApp;
@@ -14,7 +13,7 @@ import com.xqh.ad.tkmapper.mapper.AdAppMapper;
 import com.xqh.ad.tkmapper.mapper.AdAppMediaMapper;
 import com.xqh.ad.tkmapper.mapper.AdClickMapper;
 import com.xqh.ad.tkmapper.mapper.AdLeagueMapper;
-import com.xqh.ad.utils.HttpUtils;
+import com.xqh.ad.utils.AsyncUtils;
 import com.xqh.ad.utils.condition.MqConsumerCondition;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
@@ -46,6 +45,8 @@ public class FreeloadMqConsumer
     private CustomAdService customAdService;
     @Resource
     private AdClickMapper adClickMapper;
+    @Resource
+    private AsyncUtils asyncUtils;
 
     @RabbitHandler
     public void receive(Object o) {
@@ -74,8 +75,7 @@ public class FreeloadMqConsumer
             return;
         }
 
-        HttpResult httpResult = HttpUtils.get(reportUrl);
-        log.info("蹭量上报地址：{} 返回值状态码:{}", reportUrl, httpResult.getStatus());
+        asyncUtils.report(reportUrl);
     }
 
     private FreeloadMqDTO getFreeloadMqDTO(Object o) {
