@@ -8,16 +8,16 @@ import lombok.Data;
 @Data
 public class S2SReportResult
 {
-    private String status;
-    private String token;
+    private Integer ret;
+    private String msg;
 
     public S2SReportResult()
     {
     }
 
-    public S2SReportResult(String status, String token)
+    public S2SReportResult(Integer ret, String msg)
     {
-        this.status = status;
-        this.token = token;
+        this.ret = ret;
+        this.msg = msg;
     }
 }

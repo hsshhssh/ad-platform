@@ -116,7 +116,7 @@ public abstract class LeagueAbstractService
         if(null != reportTypeStr && 2 == Integer.valueOf(reportTypeStr))
         {
             logger.info("下游使用s2s方式 上报上游 返回成功");
-            S2SReportResult reportResult = new S2SReportResult("success", String.valueOf(adClick.getId()));
+            S2SReportResult reportResult = new S2SReportResult(0, String.valueOf(adClick.getId()));
             CommonUtils.writeResponse(resp, JSONObject.toJSONString(reportResult));
             return;
         }

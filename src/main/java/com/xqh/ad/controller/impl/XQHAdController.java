@@ -126,7 +126,7 @@ public class XQHAdController implements IXQHAdController
         if(null != reportTypeStr && 2 == Integer.valueOf(reportTypeStr) && 1 == adApp.getReportType())
         {
             logger.info("下游s2s方式 上游也是302方式 reportType:{} ", reportTypeStr);
-            S2SReportResult reportResult = new S2SReportResult("success", String.valueOf(adClick.getId()));
+            S2SReportResult reportResult = new S2SReportResult(0, String.valueOf(adClick.getId()));
             CommonUtils.writeResponse(resp, JSONObject.toJSONString(reportResult));
         }
         else
