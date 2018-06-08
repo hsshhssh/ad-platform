@@ -7,22 +7,22 @@ import org.springframework.context.annotation.ConditionContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
 /**
- * Created by hssh on 2018/5/12.
+ * Created by hssh on 2018/6/6.
  */
 @Slf4j
-public class MqConsumerCondition implements Condition
+public class IdfaReportMqConsumerCondition implements Condition
 {
     @Override
     public boolean matches(ConditionContext conditionContext, AnnotatedTypeMetadata annotatedTypeMetadata)
     {
-        String condition = System.getProperty(ConditionConstants.MQCONSUMER_CONDITION);
+        String condition = System.getProperty(ConditionConstants.IDFA_REPORT_MQCONSUMER_CONDITION);
         if(Constant.CONDITION_PASS_FLAG.equals(condition)) {
-            log.info("@@@@@@@@@@@@@---------------@@@@@@@@@");
-            log.info("@@@@@@@@@@@@@消息队列消费者开启@@@@@@@@");
-            log.info("@@@@@@@@@@@@@---------------@@@@@@@@@");
+            log.info("@@@@@@@@@@@@@---------------@@@@@@@@@@@@@@@@");
+            log.info("@@@@@@@@@@@@@idfa上报消息队列消费者开启@@@@@@@@");
+            log.info("@@@@@@@@@@@@@---------------@@@@@@@@@@@@@@@@");
             return true;
         } else {
-            log.info("@@@@@@@@@@@@@@消息队列消费者关闭@@@@@@@@@@@@@@@");
+            log.info("@@@@@@@@@@@@@@idfa上报消息队列消费者关闭@@@@@@@@@@@@@@@");
             return false;
         }
     }

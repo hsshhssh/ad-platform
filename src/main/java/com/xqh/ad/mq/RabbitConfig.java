@@ -16,6 +16,11 @@ public class RabbitConfig
      */
     public static final String FREELOAD_MQ = "freeload_mq";
 
+    /**
+     * idfa上报消息队列
+     */
+    public static final String IDFA_REPORT_MQ = "idfa_report_mq";
+
     @Bean
     public Queue testQueue() {
         return new Queue("test");
@@ -24,6 +29,11 @@ public class RabbitConfig
     @Bean
     public Queue freeloadQueue() {
         return new Queue(FREELOAD_MQ);
+    }
+
+    @Bean
+    public Queue idfaReportQueue() {
+        return new Queue(IDFA_REPORT_MQ);
     }
 
 }

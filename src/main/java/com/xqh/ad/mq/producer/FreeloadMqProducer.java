@@ -6,6 +6,7 @@ import com.google.common.base.Throwables;
 import com.xqh.ad.entity.other.FreeloadMqDTO;
 import com.xqh.ad.mq.RabbitConfig;
 import com.xqh.ad.utils.Constant;
+import com.xqh.ad.utils.condition.ConditionConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -40,7 +41,7 @@ public class FreeloadMqProducer
     }
 
     public boolean isAllowSend() {
-        return Constant.CONDITION_PASS_FLAG.equals(System.getProperty("ad.condition.mqproducer"));
+        return Constant.CONDITION_PASS_FLAG.equals(System.getProperty(ConditionConstants.MQPRODUCER_CONDITION));
     }
 
 }

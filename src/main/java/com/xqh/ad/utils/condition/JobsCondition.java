@@ -15,7 +15,7 @@ public class JobsCondition implements Condition
     @Override
     public boolean matches(ConditionContext conditionContext, AnnotatedTypeMetadata annotatedTypeMetadata)
     {
-        String condition = System.getProperty("ad.condition.job");
+        String condition = System.getProperty(ConditionConstants.JOBS_CONDITION);
         if(Constant.CONDITION_PASS_FLAG.equals(condition)) {
             log.info("@@@@@@@@@@@@@---------------@@@@@@@@@");
             log.info("@@@@@@@@@@@@@定时任务开启@@@@@@@@@@@");
