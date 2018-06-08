@@ -43,4 +43,9 @@ public class ConfigUtils
     @Value(path = "/config/zkconf/ad", key = "appMediaBaseHost")
     private String appMediaBaseHost;
 
+    /**
+     * 每次获取上报idfa最大条数
+     */
+    @Value(path = "/config/zkconf/ad", key = "getReportIdfaMaxSize")
+    private String getReportIdfaMaxSize;
 }

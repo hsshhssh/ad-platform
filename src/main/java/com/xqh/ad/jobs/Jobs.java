@@ -1,10 +1,11 @@
-package com.xqh.ad.utils;
+package com.xqh.ad.jobs;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.xqh.ad.tkmapper.entity.*;
 import com.xqh.ad.tkmapper.mapper.*;
+import com.xqh.ad.utils.CommonUtils;
 import com.xqh.ad.utils.common.ExampleBuilder;
 import com.xqh.ad.utils.common.Search;
 import com.xqh.ad.utils.condition.JobsCondition;
