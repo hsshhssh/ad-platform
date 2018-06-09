@@ -210,7 +210,7 @@ public class XQHAdService
             else
             {
                 int nowTime = (int) (System.currentTimeMillis()/1000);
-                logger.info("回调是获取点击记录 7日点击记录表不命中 保存为回调丢失记录 clickid:{}", clickId);
+                logger.info("回调时获取点击记录 7日点击记录表不命中 保存为回调丢失记录 clickid:{}", clickId);
                 AdDownloadMissRecord adDownloadMissRecord = new AdDownloadMissRecord();
                 adDownloadMissRecord.setMissClickId(clickId);
                 adDownloadMissRecord.setMediaCallbackUrl(mediaCallbackUrl);
