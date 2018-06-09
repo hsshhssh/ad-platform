@@ -52,7 +52,7 @@ public class TencentAdController implements ITencentAdController
             return ;
         }
 
-        xqhAdService.callback(Integer.valueOf(schId));
+        xqhAdService.callback(Integer.valueOf(schId), CommonUtils.getFullUrl(req));
         CommonUtils.writeResponse(resp, JSONObject.toJSONString(new CallbackResponse(CallbackResponseEnum.SUCC)));
 
         //AdClick adClick = adClickMapper.selectByPrimaryKey(Integer.valueOf(schId));

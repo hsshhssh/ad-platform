@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xqh.ad.tkmapper.mapper.AdClickHistoryMapper" >
+  <resultMap id="BaseResultMap" type="com.xqh.ad.tkmapper.entity.AdClickHistory" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="app_media_id" property="appMediaId" jdbcType="INTEGER" />
+    <result column="app_id" property="appId" jdbcType="INTEGER" />
+    <result column="media_id" property="mediaId" jdbcType="INTEGER" />
+    <result column="league_id" property="leagueId" jdbcType="INTEGER" />
+    <result column="phone_type" property="phoneType" jdbcType="TINYINT" />
+    <result column="imei" property="imei" jdbcType="CHAR" />
+    <result column="mac" property="mac" jdbcType="CHAR" />
+    <result column="ip" property="ip" jdbcType="CHAR" />
+    <result column="android_id" property="androidId" jdbcType="CHAR" />
+    <result column="idfa" property="idfa" jdbcType="CHAR" />
+    <result column="callback_url" property="callbackUrl" jdbcType="VARCHAR" />
+    <result column="extend_params_1" property="extendParams1" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="INTEGER" />
+  </resultMap>
+</mapper>

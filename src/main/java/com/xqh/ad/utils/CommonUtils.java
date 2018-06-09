@@ -66,6 +66,13 @@ public class CommonUtils {
         return host + "?" + Joiner.on("&").join(paramList);
     }
 
+    public static String getFullUrl(HttpServletRequest request)
+    {
+        String host = request.getRequestURI();
+        TreeMap<String, String> params = getParams(request);
+        return getFullUrl(host, params);
+    }
+
     /**
      * 取得零点时间
      */

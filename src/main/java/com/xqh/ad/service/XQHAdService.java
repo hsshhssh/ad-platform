@@ -15,6 +15,7 @@ import com.xqh.ad.utils.constant.MediaTypeEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -71,6 +72,10 @@ public class XQHAdService
     private AdFreeloadRelateMapper adFreeloadRelateMapper;
     @Resource
     private FreeloadMqProducer freeloadMqProducer;
+    @Resource
+    private AdClickHistoryMapper adClickHistoryMapper;
+    @Resource
+    private AdDownloadMissRecordMapper adDownloadMissRecordMapper;
 
     /**
      * 根据联盟编码选择Service
@@ -130,9 +135,9 @@ public class XQHAdService
      * 回调处理
      * @param clickId
      */
-    public void callback(int clickId)
+    public void callback(int clickId, String mediaCallbackUrl)
     {
-        AdClick adClick = adClickMapper.selectByPrimaryKeyLock(clickId);
+        AdClick adClick = getAdClickByCallback(clickId, mediaCallbackUrl);
 
         if(null == adClick)
         {
@@ -180,6 +185,43 @@ public class XQHAdService
         }
 
     }
+
+    /**
+     * 回调时获得点击记录
+     */
+    private AdClick getAdClickByCallback(int clickId, String mediaCallbackUrl)
+    {
+        AdClick adClick = adClickMapper.selectByPrimaryKey(clickId);
+        if(adClick != null)
+        {
+            logger.info("回调时获取点击记录 当日点击记录表命中 clickid:{}", clickId);
+            return adClick;
+        }
+        else
+        {
+            adClick = new AdClick();
+            AdClickHistory adClickHistory = adClickHistoryMapper.selectByPrimaryKey(clickId);
+            if(adClickHistory != null)
+            {
+                logger.info("回调时获取点击记录 7日点击记录表命中 clickid:{}", clickId);
+                BeanUtils.copyProperties(adClickHistory, adClick);
+                return adClick;
+            }
+            else
+            {
+                int nowTime = (int) (System.currentTimeMillis()/1000);
+                logger.info("回调是获取点击记录 7日点击记录表不命中 保存为回调丢失记录 clickid:{}", clickId);
+                AdDownloadMissRecord adDownloadMissRecord = new AdDownloadMissRecord();
+                adDownloadMissRecord.setMissClickId(clickId);
+                adDownloadMissRecord.setMediaCallbackUrl(mediaCallbackUrl);
+                adDownloadMissRecord.setCreateTime(nowTime);
+                adDownloadMissRecord.setUpdateTime(nowTime);
+                adDownloadMissRecordMapper.insertSelective(adDownloadMissRecord);
+                return null;
+            }
+        }
+    }
+
 
     private String getCallbackUrl(AdClick adClick)
     {
