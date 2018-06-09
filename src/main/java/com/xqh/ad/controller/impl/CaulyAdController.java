@@ -42,7 +42,7 @@ public class CaulyAdController implements ICaulyAdController
             return ;
         }
 
-        xqhAdService.callback(Integer.valueOf(clickIdStr));
+        xqhAdService.callback(Integer.valueOf(clickIdStr), CommonUtils.getFullUrl(req));
 
         CommonUtils.writeResponse(resp, JSONObject.toJSONString(new CallbackResponse(CallbackResponseEnum.SUCC)));
 

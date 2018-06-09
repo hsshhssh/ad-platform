@@ -42,7 +42,7 @@ public class DaoYouDaoAdController implements IDaoYouDaoAdController
             return ;
         }
 
-        xqhAdService.callback(Integer.valueOf(clickIdStr));
+        xqhAdService.callback(Integer.valueOf(clickIdStr), CommonUtils.getFullUrl(req));
         CommonUtils.writeResponse(resp, JSONObject.toJSONString(new CallbackResponse(CallbackResponseEnum.SUCC)));
         return;
     }
