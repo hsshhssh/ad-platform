@@ -25,7 +25,7 @@ public class IdfaReportMqProducer
 
     public void send(IdfaReportMqDTO idfaReportMqDTO) {
         if(isAllowSend()) {
-            log.info("idfa库上报生产者 消息队列发送消息：{}", JSON.toJSONString(idfaReportMqDTO));
+            // log.info("idfa库上报生产者 消息队列发送消息：{}", JSON.toJSONString(idfaReportMqDTO));
             try
             {
                 amqpTemplate.convertAndSend(RabbitConfig.IDFA_REPORT_MQ, JSON.toJSONString(idfaReportMqDTO));
