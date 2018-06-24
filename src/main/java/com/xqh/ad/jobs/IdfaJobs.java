@@ -36,7 +36,7 @@ public class IdfaJobs
     @Resource
     private IdfaReportMqProducer idfaReportMqProducer;
 
-    @Scheduled(cron = "0/10 * * * * ? ")
+    @Scheduled(cron = "0/5 * * * * ? ")
     public void getAndSendIdfa() {
         // 获取上报数据
         List<AdOdsIdfaReport> idfaList = getIdfaList();
@@ -45,11 +45,12 @@ public class IdfaJobs
             return ;
         }
 
+        // 发送消息
+        sendMqMsg(idfaList);
+
         // 修改为已发送状态
         updateSentState(idfaList);
 
-        // 发送消息
-        sendMqMsg(idfaList);
     }
 
     private void sendMqMsg(List<AdOdsIdfaReport> idfaList) {
