@@ -1,15 +1,47 @@
 package com.xqh.ad;
 
+import com.xqh.ad.service.XQHAdService;
 import com.xqh.ad.utils.DiscountConfigUtils;
 import com.xqh.ad.utils.UrlUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
+import javax.annotation.Resource;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
 @Slf4j
 public class AdApplicationTests {
+
+	@Resource
+	private XQHAdService xqhAdService;
+
+	@Test
+	public void callbackTest() throws InterruptedException {
+		Thread t1 = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				xqhAdService.callback(1, "url1");
+			}
+		});
+
+		Thread t2 = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				xqhAdService.callback(2, "url2");
+			}
+		});
+
+		t1.start();
+		t2.start();
+
+		Thread.sleep(1000);
+
+	}
 
 	@Test
 	public void contextLoads() {

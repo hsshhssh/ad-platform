@@ -37,6 +37,7 @@
 		<dozer.version>5.4.0</dozer.version>
 		<httpclient.version>4.5.3</httpclient.version>
 		<common.io.version>1.3.2</common.io.version>
+		<common.configuration.version>1.10</common.configuration.version>
 
 	</properties>
 
@@ -120,6 +121,25 @@
 			<artifactId>commons-io</artifactId>
 			<version>${common.io.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+			<version>${common.configuration.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.11</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>1.1.10</version>
+		</dependency>
+
 
 		<!--rabbitmq-->
 		<dependency>
