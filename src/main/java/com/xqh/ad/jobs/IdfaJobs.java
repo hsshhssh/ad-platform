@@ -34,8 +34,6 @@ public class IdfaJobs
     @Resource
     private AdOdsIdfaReportMapper adOdsIdfaReportMapper;
     @Resource
-    private ConfigUtils configUtils;
-    @Resource
     private IdfaReportMqProducer idfaReportMqProducer;
     @Resource
     private AdIdfaReportConfigUtils adIdfaReportConfigUtils;
@@ -109,9 +107,8 @@ public class IdfaJobs
     }
 
     private List<AdOdsIdfaReport> getIdfaList(int count) {
-        Search search = new Search();
-        search.put("state_eq", 0);
-        Example example = new ExampleBuilder(AdOdsIdfaReport.class).search(search).build();
-        return adOdsIdfaReportMapper.selectByExampleAndRowBounds(example, new RowBounds(0, count));
+        AdOdsIdfaReport adOdsIdfaReport = new AdOdsIdfaReport();
+        adOdsIdfaReport.setState(0);
+        return adOdsIdfaReportMapper.selectByRecordAndLimit(adOdsIdfaReport, count);
     }
 }

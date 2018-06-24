@@ -12,4 +12,10 @@
     <result column="state" property="state" jdbcType="TINYINT" />
     <result column="create_time" property="createTime" jdbcType="INTEGER" />
   </resultMap>
+
+  <select id="selectByRecordAndLimit" resultMap="BaseResultMap">
+      select id, app_media_id, ip, idfa, state, create_time from ad_ods_idfa_report
+      where state=#{record.state}
+      limit 0, #{count}
+  </select>
 </mapper>
