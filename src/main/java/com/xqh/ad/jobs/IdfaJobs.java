@@ -38,7 +38,7 @@ public class IdfaJobs
 
     @Scheduled(cron = "0/5 * * * * ? ")
     public void getAndSendIdfa() {
-        long starTime = System.currentTimeMillis() / 1000;
+        long starTime = System.currentTimeMillis();
         log.info("蹭量自动任务开始 startTime:{}", starTime);
         // 获取上报数据
         List<AdOdsIdfaReport> idfaList = getIdfaList();
@@ -53,8 +53,8 @@ public class IdfaJobs
         // 修改为已发送状态
         updateSentState(idfaList);
 
-        long endTime = System.currentTimeMillis()/1000;
-        log.info("蹭量自动任务结束 endTime:{} 耗时:{}", endTime, endTime - starTime);
+        long endTime = System.currentTimeMillis();
+        log.info("蹭量自动任务结束 endTime:{} 耗时:{}ms", endTime, endTime - starTime);
     }
 
     private void sendMqMsg(List<AdOdsIdfaReport> idfaList) {
