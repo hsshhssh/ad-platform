@@ -50,7 +50,7 @@ public class IdfaJobs
         log.info("蹭量自动任务 获取条数：{}", count);
 
         // 获取上报数据
-        List<AdOdsIdfaReport> idfaList = getIdfaList();
+        List<AdOdsIdfaReport> idfaList = getIdfaList(count);
         if(CollectionUtils.isEmpty(idfaList)) {
             log.info("idfa上报自动任务 没有需要上报的idfa");
             return ;
@@ -108,10 +108,10 @@ public class IdfaJobs
         adOdsIdfaReportMapper.updateByExampleSelective(record,example);
     }
 
-    private List<AdOdsIdfaReport> getIdfaList() {
+    private List<AdOdsIdfaReport> getIdfaList(int count) {
         Search search = new Search();
         search.put("state_eq", 0);
         Example example = new ExampleBuilder(AdOdsIdfaReport.class).search(search).build();
-        return adOdsIdfaReportMapper.selectByExampleAndRowBounds(example, new RowBounds(0, Integer.valueOf(configUtils.getGetReportIdfaMaxSize())));
+        return adOdsIdfaReportMapper.selectByExampleAndRowBounds(example, new RowBounds(0, count));
     }
 }
