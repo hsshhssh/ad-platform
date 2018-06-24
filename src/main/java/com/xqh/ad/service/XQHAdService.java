@@ -5,6 +5,7 @@ import com.xqh.ad.entity.other.FreeloadMqDTO;
 import com.xqh.ad.exception.NoLeagueChannelException;
 import com.xqh.ad.mq.producer.FreeloadMqProducer;
 import com.xqh.ad.service.league.*;
+import com.xqh.ad.service.tx.AdDownloadTxService;
 import com.xqh.ad.tkmapper.entity.*;
 import com.xqh.ad.tkmapper.mapper.*;
 import com.xqh.ad.utils.*;
@@ -43,11 +44,7 @@ public class XQHAdService
     @Autowired
     private AdClickMapper adClickMapper;
     @Autowired
-    private AdDownloadMapper adDownloadMapper;
-    @Autowired
     private AsyncUtils asyncUtils;
-    @Autowired
-    private AdAppMediaMapper adAppMediaMapper;
     @Autowired
     private DaoYouDaoAdService daoYouDaoAdService;
     @Autowired
@@ -67,8 +64,6 @@ public class XQHAdService
     @Autowired
     private AdPPMediaService adPPMediaService;
     @Resource
-    private DiscountConfigUtils discountConfigUtils;
-    @Resource
     private AdFreeloadRelateMapper adFreeloadRelateMapper;
     @Resource
     private FreeloadMqProducer freeloadMqProducer;
@@ -76,6 +71,8 @@ public class XQHAdService
     private AdClickHistoryMapper adClickHistoryMapper;
     @Resource
     private AdDownloadMissRecordMapper adDownloadMissRecordMapper;
+    @Resource
+    private AdDownloadTxService adDownloadTxService;
 
     /**
      * 根据联盟编码选择Service
@@ -145,21 +142,8 @@ public class XQHAdService
             return ;
         }
 
-        // TODO 计算扣量
-        boolean isSkip = isSkipDownLoad(adClick);
-
-        logger.info("扣量结果 isSkip:{}", isSkip);
-
-        // 插入下载记录
-        int nowTime = (int) (System.currentTimeMillis()/1000);
-        AdDownload adDownload = DozerUtils.map(adClick, AdDownload.class);
-        adDownload.setIsSkip(isSkip ? 1 : 0);
-        adDownload.setId(null);
-        adDownload.setClickId(adClick.getId());
-        adDownload.setCreateTime(nowTime);
-        adDownload.setUpdateTime(nowTime);
-
-        adDownloadMapper.insertSelective(adDownload);
+        // 保存点击记录并返回是否需要扣量
+        boolean isSkip = adDownloadTxService.countAndInsertDdDownload(adClick);
 
         logger.info("广告平台 异步回调开始 clickId:{}", clickId);
 
@@ -287,75 +271,7 @@ public class XQHAdService
         return xqhKeyValue;
     }
 
-    /**
-     * 判断是否需要扣量
-     * @param adClick
-     * @return
-     */
-    public boolean isSkipDownLoad(AdClick adClick)
-    {
-        logger.info("判断是否需要扣量开始 clickId:{}", adClick.getId());
 
-        AdAppMedia adAppMedia = adAppMediaMapper.selectByPrimaryKey(adClick.getAppMediaId());
-
-        if(null == adAppMedia)
-        {
-            logger.error("计算扣量失败 正常回调 appMediaId异常 clickId:{} appMediaId:{}", adClick.getId(), adClick.getAppMediaId());
-            return false;
-        }
-
-        // 计算该应用当前下载量
-        Search search = new Search();
-        search.put("appMediaId_eq", adClick.getAppMediaId());
-        int curDownloadCount = adDownloadMapper.selectCountByExample(new ExampleBuilder(AdDownload.class).search(search).build());
-        
-        logger.info("clickId:{} appMediaId:{} 当前下载量:{} 扣量初始值:{} 扣量率:{}", adClick.getId(), adClick.getAppMediaId(), curDownloadCount, adAppMedia.getStartCount(), adAppMedia.getDiscountRate());
-        
-        if(curDownloadCount < adAppMedia.getStartCount())
-        {
-            logger.info("clickId:{} appMediaId:{} 当前下载量小于初始值 不扣量", adClick.getId(),  adClick.getAppMediaId());
-            return  false;
-        }
-
-
-        // 取得差额的个位数
-        int diff = curDownloadCount - adAppMedia.getStartCount() + 1;
-        int unit = diff % 10;
-
-        String discountConfig = discountConfigUtils.getConfig(adAppMedia.getDiscountRate());
-        logger.info("discountConfig:{}", discountConfig);
-        if(StringUtils.isNotBlank(discountConfig) && discountConfig.length() == 10)
-        {
-            logger.info("扣量计算zk配置化 回调率：{} 配置：{}", adAppMedia.getDiscountRate(), discountConfig);
-            char flag = discountConfig.charAt(unit);
-            if(java.util.Objects.equals('1', flag))
-            {
-                logger.info("第：{}位标识：1 回调 不扣量", unit);
-                return false;
-            }
-            else
-            {
-                logger.info("第：{}为标识：非1 不回调 扣量 flag:{}", unit, flag);
-                return true;
-            }
-        }
-        else
-        {
-            logger.info("扣量计算db配置化 回调率：{}", adAppMedia.getDiscountRate());
-            if(unit >= (adAppMedia.getDiscountRate() * 10))
-            {
-                logger.info("clickId:{} appMediaId:{} 扣量", adClick.getId(), adClick.getAppMediaId());
-                return true;
-            }
-            else
-            {
-                logger.info("clickId:{} appMediaId:{} 不扣量", adClick.getId(), adClick.getAppMediaId());
-                return false;
-            }
-        }
-
-
-    }
 
     /**
      * 蹭量处理：发送蹭量消息

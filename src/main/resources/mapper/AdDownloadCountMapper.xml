@@ -9,4 +9,9 @@
     <result column="app_media_id" property="appMediaId" jdbcType="INTEGER" />
     <result column="download_count" property="downloadCount" jdbcType="INTEGER" />
   </resultMap>
+
+
+  <select id="selectByAdAppMediaIdLock" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+      select * from ad_download_count where app_media_id = #{adAppMediaId} FOR UPDATE
+  </select>
 </mapper>
