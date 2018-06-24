@@ -1,6 +1,7 @@
 package com.xqh.ad;
 
 import com.xqh.ad.service.XQHAdService;
+import com.xqh.ad.utils.AdIdfaReportConfigUtils;
 import com.xqh.ad.utils.DiscountConfigUtils;
 import com.xqh.ad.utils.UrlUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.util.Calendar;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -19,6 +21,16 @@ public class AdApplicationTests {
 
 	@Resource
 	private XQHAdService xqhAdService;
+
+	@Resource
+	private AdIdfaReportConfigUtils adIdfaReportConfigUtils;
+
+	@Test
+	public void testConfig()
+	{
+		Integer minValue = adIdfaReportConfigUtils.getMinValue(1, 29);
+		log.info("==========config:{}", minValue);
+	}
 
 	@Test
 	public void callbackTest() throws InterruptedException {
