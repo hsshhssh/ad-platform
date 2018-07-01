@@ -68,6 +68,9 @@ public class AsyncUtils
     @Async
     public void idfaReportAndSaveAdClick(IdfaReportMqDTO idfaReportMqDTO, AdApp adApp, AdLeague adLeague, AdClick adClick)
     {
+        // 保存点击记录
+        adClickMapper.insertSelective(adClick);
+
         // 获取上报地址 并上报
         String reportUrl;
         try
@@ -81,8 +84,6 @@ public class AsyncUtils
         HttpResult httpResult = HttpUtils.get(reportUrl);
         logger.info("idfa上报消费者异步处理 上报地址:{} 返回值状态码:{}", reportUrl, httpResult.getStatus());
 
-        // 保存点击记录
-        adClickMapper.insertSelective(adClick);
 
         // 删除上报记录
         adOdsIdfaReportMapper.deleteByPrimaryKey(idfaReportMqDTO.getId());
