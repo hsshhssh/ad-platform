@@ -79,6 +79,14 @@ public class IdfaReportMqConsumer extends AbstractMqConsumer<IdfaReportMqDTO>
         asyncUtils.idfaReportAndSaveAdClick(idfaReportMqDTO, adApp, adLeague, adClick);
     }
 
+    /**
+     * 特殊校验 如看该idfa是否已经下载过该应用
+     */
+    private Boolean doSpecialCheck(IdfaReportMqDTO idfaReportMqDTO, AdLeague adLeague)
+    {
+        return false;
+    }
+
 
     private AdClick getAdClick(IdfaReportMqDTO reportMqDTO, AdAppMedia adAppMedia, AdApp adApp)
     {

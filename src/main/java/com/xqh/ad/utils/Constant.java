@@ -129,6 +129,10 @@ public class Constant
      * 三七游戏秘钥
      */
     public final static String SIGN_37 = "_sign_37";
+    /**
+     * 考拉密钥
+     */
+    public final static String SIGN_KAOLA = "_sign_kaola";
 
     /////////////////////////////////////////////////////////////////////////
     public final static String SUCC = "success";
@@ -152,5 +156,10 @@ public class Constant
      * 编译通过条件常量
      */
     public final static String CONDITION_PASS_FLAG = "pass";
+
+    /**
+     * 时间格式
+     */
+    public final static String DATE_FORMATE = "yyyy-mm-dd hh:mm:ss.sss";
 
 }
