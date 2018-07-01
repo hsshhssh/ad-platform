@@ -171,8 +171,19 @@ public class CustomAdService extends LeagueAbstractService
                 continue;
             }
 
+            // 37特殊签名
             if(Constant.SIGN_37.equals(reportConfig.getXqhKey())) {
                 params.put(reportConfig.getLeagueKey(), CommonUtils.getMd5(basicParams.get("key") + "|" + adClick.getIdfa() + "|" + adClick.getIp()));
+                continue;
+            }
+
+            if(Constant.SIGN_KAOLA.equals(reportConfig.getXqhKey()))
+            {
+                String timestamp = CommonUtils.getFormatDate(Constant.DATE_FORMATE);
+                params.put("timestamp", timestamp);
+                params.put("sign", getKaoLaSign(basicParams.get("secret_key"), basicParams.get("app_key"), String.valueOf(adClick.getId()), adClick.getIdfa(), basicParams.get("sign_method"), basicParams.get("sourceId"), timestamp, basicParams.get("v")));
+
+                basicParams.remove("secret_key");
                 continue;
             }
 
@@ -213,7 +224,41 @@ public class CustomAdService extends LeagueAbstractService
     }
 
 
-
+    /**
+     * 99a76459ef304fd0b08c8711c5f51111
+     * app_key19f61a9e0e50406ea5eb986526c4d693
+     * appid965789238
+     * clickId19e521ec-2c66-4315-bde2-806685581a7d
+     * idfaB9C9653F-91ED-4909-BE86-500AC7A399E5
+     * sign_methodmd5
+     * sourceId99subchannelsubchannel_01
+     * timestamp2016-05-11 15:50:57.167
+     * v1.0
+     * 99a76459ef304fd0b08c8711c5f51111
+     */
+    private String getKaoLaSign(String secretKey, String appKey, String clickId, String idfa, String signMethod, String sourceId, String timestamp, String version)
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(secretKey);
+        stringBuilder.append("app_key");
+        stringBuilder.append(appKey);
+        stringBuilder.append("clickId");
+        stringBuilder.append(clickId);
+        stringBuilder.append("idfa");
+        stringBuilder.append(idfa);
+        stringBuilder.append("sign_method");
+        stringBuilder.append(signMethod);
+        stringBuilder.append("sourceId");
+        stringBuilder.append(sourceId);
+        stringBuilder.append("timestamp");
+        stringBuilder.append(timestamp);
+        stringBuilder.append("v");
+        stringBuilder.append(version);
+        stringBuilder.append(secretKey);
+        String sign = CommonUtils.getMd5(stringBuilder.toString()).toUpperCase();
+        logger.info("加密前字符串：{} 加密后字符串：{}", stringBuilder.toString(), sign);
+        return sign;
+    }
 
     /**
      * 处理某些联盟的特殊要求

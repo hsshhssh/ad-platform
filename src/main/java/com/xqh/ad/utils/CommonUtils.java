@@ -3,6 +3,7 @@ package com.xqh.ad.utils;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.xqh.ad.exception.ErrorResponseEunm;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,14 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
  * Created by hssh on 2017/5/1.
  */
+@Slf4j
 public class CommonUtils {
-
-    private static Logger logger = LoggerFactory.getLogger(CommonUtils.class);
 
 
     /**
@@ -188,6 +189,13 @@ public class CommonUtils {
         return Arrays.asList(year, month);
 
     }
+
+    public static String getFormatDate(String format)
+    {
+        SimpleDateFormat df = new SimpleDateFormat(format);
+        return df.format(new Date());
+    }
+
 
     public static void main(String[] args)
     {
