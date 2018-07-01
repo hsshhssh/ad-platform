@@ -160,6 +160,6 @@ public class Constant
     /**
      * 时间格式
      */
-    public final static String DATE_FORMATE = "yyyy-mm-dd hh:mm:ss.sss";
+    public final static String DATE_FORMATE = "yyyy-MM-dd HH:mm:ss.SSS";
 
 }
