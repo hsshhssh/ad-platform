@@ -180,7 +180,7 @@ public class CustomAdService extends LeagueAbstractService
             if(Constant.SIGN_KAOLA.equals(reportConfig.getXqhKey()))
             {
                 String timestamp = CommonUtils.getFormatDate(Constant.DATE_FORMATE);
-                params.put("timestamp", timestamp);
+                params.put("timestamp", URLEncoder.encode(timestamp,"UTF-8"));
                 params.put("sign", getKaoLaSign(basicParams.get("secret_key"), basicParams.get("app_key"), String.valueOf(adClick.getId()), adClick.getIdfa(), basicParams.get("sign_method"), basicParams.get("sourceId"), timestamp, basicParams.get("v")));
 
                 basicParams.remove("secret_key");
