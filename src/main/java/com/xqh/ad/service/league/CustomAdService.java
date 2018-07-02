@@ -242,6 +242,8 @@ public class CustomAdService extends LeagueAbstractService
         stringBuilder.append(secretKey);
         stringBuilder.append("app_key");
         stringBuilder.append(appKey);
+        stringBuilder.append("clickId");
+        stringBuilder.append(clickId);
         stringBuilder.append("idfa");
         stringBuilder.append(idfa);
         stringBuilder.append("sign_method");
