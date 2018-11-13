@@ -1,5 +1,6 @@
 package com.xqh.ad.jobs;
 
+import com.google.common.base.Splitter;
 import com.xqh.ad.entity.other.IdfaReportMqDTO;
 import com.xqh.ad.mq.producer.IdfaReportMqProducer;
 import com.xqh.ad.tkmapper.entity.AdOdsIdfaReport;
@@ -79,12 +80,22 @@ public class IdfaJobs
     private void sendMqMsg(List<AdOdsIdfaReport> idfaList) {
         for (AdOdsIdfaReport idfaReport : idfaList)
         {
-            IdfaReportMqDTO idfaReportMqDTO = new IdfaReportMqDTO();
-            idfaReportMqDTO.setAppMediaId(idfaReport.getAppMediaId());
-            idfaReportMqDTO.setIp(idfaReport.getIp());
-            idfaReportMqDTO.setIdfa(idfaReport.getIdfa());
-            idfaReportMqDTO.setId(idfaReport.getId());
-            idfaReportMqProducer.send(idfaReportMqDTO);
+            List<String> appMedisIdList = Splitter.on(",").omitEmptyStrings().splitToList(idfaReport.getAppMediaId());
+            for (String appMediaId : appMedisIdList) {
+                try {
+                    IdfaReportMqDTO idfaReportMqDTO = new IdfaReportMqDTO();
+                    idfaReportMqDTO.setAppMediaId(Integer.valueOf(appMediaId));
+                    idfaReportMqDTO.setIp(idfaReport.getIp());
+                    idfaReportMqDTO.setIdfa(idfaReport.getIdfa());
+                    idfaReportMqDTO.setId(idfaReport.getId());
+                    idfaReportMqProducer.send(idfaReportMqDTO);
+                } catch (NumberFormatException e) {
+                    log.error("配置异常 idfaReportId:{} appMediaId:{}", idfaReport.getId(), idfaReport.getAppMediaId(), e);
+                    // 已发送到消息队列
+                    AdOdsIdfaReport record = AdOdsIdfaReport.builder().id(idfaReport.getId()).state(1).build();
+                    adOdsIdfaReportMapper.updateByPrimaryKeySelective(record);
+                }
+            }
         }
     }
 

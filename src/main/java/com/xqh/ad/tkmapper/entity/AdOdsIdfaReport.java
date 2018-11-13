@@ -1,24 +1,29 @@
 package com.xqh.ad.tkmapper.entity;
 
-import lombok.Data;
-
 import javax.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Table(name = "`ad_ods_idfa_report`")
 @Data
-@Table(name = "ad_ods_idfa_report")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class AdOdsIdfaReport {
     /**
      * 主键id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "JDBC")
     private Integer id;
 
     /**
      * 推广应用-媒体主键
      */
     @Column(name = "app_media_id")
-    private Integer appMediaId;
+    private String appMediaId;
 
     /**
      * ip
