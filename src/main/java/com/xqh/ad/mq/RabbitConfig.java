@@ -19,7 +19,7 @@ public class RabbitConfig
     /**
      * idfa上报消息队列
      */
-    public static final String IDFA_REPORT_MQ = "idfa_report_mq";
+    public static final String IDFA_REPORT_MQ = "idfa_report_mq_ddj";
 
     @Bean
     public Queue testQueue() {
