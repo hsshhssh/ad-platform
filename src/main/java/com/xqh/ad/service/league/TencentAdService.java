@@ -11,7 +11,7 @@ import com.xqh.ad.tkmapper.entity.AdClick;
 import com.xqh.ad.tkmapper.entity.AdTencentInfo;
 import com.xqh.ad.tkmapper.mapper.AdTencentInfoMapper;
 import com.xqh.ad.utils.CommonUtils;
-import com.xqh.ad.utils.ConfigUtils;
+import com.xqh.ad.utils.config.ConfigUtils;
 import com.xqh.ad.utils.Constant;
 import com.xqh.ad.utils.HttpUtils;
 import com.xqh.ad.utils.common.ExampleBuilder;

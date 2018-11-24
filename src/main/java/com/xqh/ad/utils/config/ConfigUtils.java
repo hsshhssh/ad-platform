@@ -1,4 +1,4 @@
-package com.xqh.ad.utils;
+package com.xqh.ad.utils.config;
 
 import lombok.Data;
 import org.hssh.common.zkconf.Value;

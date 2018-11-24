@@ -6,7 +6,7 @@ import com.xqh.ad.tkmapper.entity.AdApp;
 import com.xqh.ad.tkmapper.entity.AdAppMedia;
 import com.xqh.ad.tkmapper.entity.AdClick;
 import com.xqh.ad.tkmapper.mapper.AdClickMapper;
-import com.xqh.ad.utils.ClickExtendParamsConfigUtils;
+import com.xqh.ad.utils.config.ClickExtendParamsConfigUtils;
 import com.xqh.ad.utils.CommonUtils;
 import com.xqh.ad.utils.Constant;
 import org.apache.commons.lang3.StringUtils;

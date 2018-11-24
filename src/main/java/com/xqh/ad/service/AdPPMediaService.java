@@ -2,7 +2,7 @@ package com.xqh.ad.service;
 
 import com.xqh.ad.entity.other.PPMediaParam;
 import com.xqh.ad.utils.CommonUtils;
-import com.xqh.ad.utils.PPMediaConfigUtils;
+import com.xqh.ad.utils.config.PPMediaConfigUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
