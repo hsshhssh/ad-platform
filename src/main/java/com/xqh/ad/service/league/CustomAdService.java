@@ -8,7 +8,7 @@ import com.xqh.ad.tkmapper.entity.*;
 import com.xqh.ad.tkmapper.mapper.AdLeagueMapper;
 import com.xqh.ad.utils.*;
 import com.xqh.ad.utils.config.ConfigUtils;
-import com.xqh.ad.utils.constant.ReportTypeEnum;
+import com.xqh.ad.utils.enums.ReportTypeEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

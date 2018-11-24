@@ -12,7 +12,7 @@ import com.xqh.ad.utils.*;
 import com.xqh.ad.utils.common.ExampleBuilder;
 import com.xqh.ad.utils.common.Search;
 import com.xqh.ad.utils.config.ConfigUtils;
-import com.xqh.ad.utils.constant.MediaTypeEnum;
+import com.xqh.ad.utils.enums.MediaTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;

@@ -15,7 +15,7 @@ import com.xqh.ad.utils.common.DozerUtils;
 import com.xqh.ad.utils.common.ExampleBuilder;
 import com.xqh.ad.utils.common.PageResult;
 import com.xqh.ad.utils.common.Search;
-import com.xqh.ad.utils.constant.ReportTypeEnum;
+import com.xqh.ad.utils.enums.ReportTypeEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
