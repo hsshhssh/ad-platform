@@ -1,4 +1,4 @@
-package com.xqh.ad.utils.constant;
+package com.xqh.ad.utils.enums;
 
 import com.xqh.ad.utils.Constant;
 

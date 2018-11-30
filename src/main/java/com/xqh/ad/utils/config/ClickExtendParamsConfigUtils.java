@@ -1,4 +1,4 @@
-package com.xqh.ad.utils;
+package com.xqh.ad.utils.config;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;

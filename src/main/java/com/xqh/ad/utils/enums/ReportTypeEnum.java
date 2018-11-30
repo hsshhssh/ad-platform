@@ -1,4 +1,4 @@
-package com.xqh.ad.utils.constant;
+package com.xqh.ad.utils.enums;
 
 /**
  * Created by hssh on 2017/9/13.

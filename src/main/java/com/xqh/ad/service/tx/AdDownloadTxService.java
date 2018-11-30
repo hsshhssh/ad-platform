@@ -7,7 +7,7 @@ import com.xqh.ad.tkmapper.entity.AdDownloadCount;
 import com.xqh.ad.tkmapper.mapper.AdAppMediaMapper;
 import com.xqh.ad.tkmapper.mapper.AdDownloadCountMapper;
 import com.xqh.ad.tkmapper.mapper.AdDownloadMapper;
-import com.xqh.ad.utils.DiscountConfigUtils;
+import com.xqh.ad.utils.config.DiscountConfigUtils;
 import com.xqh.ad.utils.common.DozerUtils;
 import com.xqh.ad.utils.common.ExampleBuilder;
 import com.xqh.ad.utils.common.Search;

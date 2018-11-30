@@ -14,7 +14,7 @@ import com.xqh.ad.utils.CommonUtils;
 import com.xqh.ad.utils.Constant;
 import com.xqh.ad.utils.common.ExampleBuilder;
 import com.xqh.ad.utils.common.Search;
-import com.xqh.ad.utils.constant.CallbackResponseEnum;
+import com.xqh.ad.utils.enums.CallbackResponseEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

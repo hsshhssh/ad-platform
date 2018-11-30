@@ -6,7 +6,7 @@ import com.xqh.ad.entity.other.CallbackResponse;
 import com.xqh.ad.service.XQHAdService;
 import com.xqh.ad.service.league.RuiShiAdService;
 import com.xqh.ad.utils.CommonUtils;
-import com.xqh.ad.utils.constant.CallbackResponseEnum;
+import com.xqh.ad.utils.enums.CallbackResponseEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

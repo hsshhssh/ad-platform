@@ -1,37 +1,24 @@
-package com.xqh.ad.jobs;
+package com.xqh.ad.service;
 
 import com.google.common.base.Splitter;
 import com.xqh.ad.entity.other.IdfaReportMqDTO;
 import com.xqh.ad.mq.producer.IdfaReportMqProducer;
 import com.xqh.ad.tkmapper.entity.AdOdsIdfaReport;
 import com.xqh.ad.tkmapper.mapper.AdOdsIdfaReportMapper;
-import com.xqh.ad.utils.AdIdfaReportConfigUtils;
-import com.xqh.ad.utils.ConfigUtils;
-import com.xqh.ad.utils.common.ExampleBuilder;
-import com.xqh.ad.utils.common.Search;
-import com.xqh.ad.utils.condition.IdfaReportJobsCondition;
+import com.xqh.ad.utils.config.AdIdfaReportConfigUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.context.annotation.Conditional;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-import tk.mybatis.mapper.entity.Example;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by hssh on 2018/6/4.
- */
 @Slf4j
-@Component
-@Conditional(IdfaReportJobsCondition.class)
-public class IdfaJobs
-{
-
+@Service
+public class IdfaJobsService {
     @Resource
     private AdOdsIdfaReportMapper adOdsIdfaReportMapper;
     @Resource
@@ -39,45 +26,45 @@ public class IdfaJobs
     @Resource
     private AdIdfaReportConfigUtils adIdfaReportConfigUtils;
 
-    @Scheduled(cron = "0/5 * * * * ? ")
-    public void getAndSendIdfa() {
+    public void getAndSendIdfa(String tableIndex) {
         long starTime = System.currentTimeMillis();
-        log.info("蹭量自动任务开始 startTime:{}", starTime);
+        log.info("蹭量自动任务开始 tableIndex:{} startTime:{}", tableIndex, starTime);
 
         // 根据当前时间获取捞取的条数
-        Integer count = getCountByCurrentTime();
-        log.info("蹭量自动任务 获取条数：{}", count);
+        Integer count = getCountByCurrentTime(tableIndex);
+        log.info("蹭量自动任务 tableIndex:{} 获取条数：{}", tableIndex, count);
 
         // 获取上报数据
-        List<AdOdsIdfaReport> idfaList = getIdfaList(count);
+        List<AdOdsIdfaReport> idfaList = getIdfaList(tableIndex, count);
         if(CollectionUtils.isEmpty(idfaList)) {
-            log.info("idfa上报自动任务 没有需要上报的idfa");
+            log.info("idfa上报自动任务 没有需要上报的idfa tableIndex:{}", tableIndex);
             return ;
         }
 
         // 发送消息
-        sendMqMsg(idfaList);
+        sendMqMsg(tableIndex, idfaList);
 
         // 修改为已发送状态
-        updateSentState(idfaList);
+        updateSentState(tableIndex, idfaList);
 
         long endTime = System.currentTimeMillis();
-        log.info("蹭量自动任务结束 endTime:{} 耗时:{}ms", endTime, endTime - starTime);
+        log.info("蹭量自动任务结束 tableIndex:{} endTime:{} 耗时:{}ms", tableIndex, endTime, endTime - starTime);
     }
+
 
     /**
      * 根据当前时间获取捞取的条数
      */
-    private Integer getCountByCurrentTime()
+    private Integer getCountByCurrentTime(String tableIndex)
     {
         Calendar cal = Calendar.getInstance();
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         int minute = cal.get(Calendar.MINUTE);
 
-        return adIdfaReportConfigUtils.getMinValue(hour, minute);
+        return adIdfaReportConfigUtils.getMinValue(tableIndex, hour, minute);
     }
 
-    private void sendMqMsg(List<AdOdsIdfaReport> idfaList) {
+    private void sendMqMsg(String tableIndex, List<AdOdsIdfaReport> idfaList) {
         for (AdOdsIdfaReport idfaReport : idfaList)
         {
             List<String> appMedisIdList = Splitter.on(",").omitEmptyStrings().splitToList(idfaReport.getAppMediaId());
@@ -88,38 +75,36 @@ public class IdfaJobs
                     idfaReportMqDTO.setIp(idfaReport.getIp());
                     idfaReportMqDTO.setIdfa(idfaReport.getIdfa());
                     idfaReportMqDTO.setId(idfaReport.getId());
+                    idfaReportMqDTO.setTableIndex(tableIndex);
                     idfaReportMqProducer.send(idfaReportMqDTO);
                 } catch (NumberFormatException e) {
                     log.error("配置异常 idfaReportId:{} appMediaId:{}", idfaReport.getId(), idfaReport.getAppMediaId(), e);
                     // 已发送到消息队列
-                    AdOdsIdfaReport record = AdOdsIdfaReport.builder().id(idfaReport.getId()).state(1).build();
-                    adOdsIdfaReportMapper.updateByPrimaryKeySelective(record);
+                    AdOdsIdfaReport record = AdOdsIdfaReport.builder().state(1).build();
+                    adOdsIdfaReportMapper.updateByIds(tableIndex, record, Collections.singletonList(idfaReport.getId()));
                 }
             }
         }
     }
 
-    private void updateSentState(List<AdOdsIdfaReport> idfaList)
+    private void updateSentState(String tableName, List<AdOdsIdfaReport> idfaList)
     {
         List<Integer> ids = new ArrayList<>(idfaList.size());
         for (AdOdsIdfaReport idfaReport : idfaList)
         {
             ids.add(idfaReport.getId());
         }
-        Search search = new Search();
-        search.put("id_in", ids);
-        Example example = new ExampleBuilder(AdOdsIdfaReport.class).search(search).build();
 
         // 已发送到消息队列
         AdOdsIdfaReport record = new AdOdsIdfaReport();
         record.setState(1);
 
-        adOdsIdfaReportMapper.updateByExampleSelective(record,example);
+        adOdsIdfaReportMapper.updateByIds(tableName, record, ids);
     }
 
-    private List<AdOdsIdfaReport> getIdfaList(int count) {
+    private List<AdOdsIdfaReport> getIdfaList(String tableIndex, int count) {
         AdOdsIdfaReport adOdsIdfaReport = new AdOdsIdfaReport();
         adOdsIdfaReport.setState(0);
-        return adOdsIdfaReportMapper.selectByRecordAndLimit(adOdsIdfaReport, count);
+        return adOdsIdfaReportMapper.selectByRecordAndLimit(tableIndex, adOdsIdfaReport, count);
     }
 }

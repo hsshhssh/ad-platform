@@ -16,7 +16,7 @@ import com.xqh.ad.tkmapper.mapper.AdAppMapper;
 import com.xqh.ad.tkmapper.mapper.AdAppMediaMapper;
 import com.xqh.ad.tkmapper.mapper.AdClickMapper;
 import com.xqh.ad.utils.CommonUtils;
-import com.xqh.ad.utils.ConfigUtils;
+import com.xqh.ad.utils.config.ConfigUtils;
 import com.xqh.ad.utils.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
