@@ -31,6 +31,13 @@
             createTime
     </sql>
 
+    <select id="selectByRecordAndLimitRaw" resultMap="BaseResultMap">
+        select id, app_media_id, ip, idfa, state, create_time
+        from ad_ods_idfa_report
+        where state=#{record.state}
+      limit 0, #{count}
+    </select>
+
     <select id="selectByRecordAndLimit" resultMap="BaseResultMap">
         select id, app_media_id, ip, idfa, state, create_time
         from ad_ods_idfa_report_${tableIndex}
