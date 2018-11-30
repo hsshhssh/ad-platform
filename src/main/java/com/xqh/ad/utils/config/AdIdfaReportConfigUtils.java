@@ -1,29 +1,107 @@
 package com.xqh.ad.utils.config;
 
 import com.google.common.base.Splitter;
-import com.google.common.collect.*;
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Table;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.hssh.common.zkconf.ValueWithMethod;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 
 @Component
 @Slf4j
 public class AdIdfaReportConfigUtils {
 
-    private ImmutableTable<Integer, Integer, Integer> minTable;
+    private ConcurrentMap<String, Table<Integer, Integer, Integer>> tableMinMap = Maps.newConcurrentMap();
+    private ConcurrentMap<String, Integer> defaultCountMap = Maps.newConcurrentMap();
 
-    private volatile Integer defaultCount = 200;
 
-    @ValueWithMethod(path = "/config/zkconf/ad_idfa_report.conf")
-    public void adIdfaReportConfigHandle(PropertiesConfiguration properties)
+    @ValueWithMethod(path = "/config/zkconf/ad_idfa_report.conf0")
+    public void adIdfaReportConfigHandle0(PropertiesConfiguration properties)
     {
+        tableMinMap.put("0", initTable("0", properties));
+    }
 
+    @ValueWithMethod(path = "/config/zkconf/ad_idfa_report.conf1")
+    public void adIdfaReportConfigHandle1(PropertiesConfiguration properties)
+    {
+        tableMinMap.put("1", initTable("1", properties));
+    }
+
+    @ValueWithMethod(path = "/config/zkconf/ad_idfa_report.conf2")
+    public void adIdfaReportConfigHandle2(PropertiesConfiguration properties)
+    {
+        tableMinMap.put("2", initTable("2", properties));
+    }
+
+    @ValueWithMethod(path = "/config/zkconf/ad_idfa_report.conf3")
+    public void adIdfaReportConfigHandle3(PropertiesConfiguration properties)
+    {
+        tableMinMap.put("3", initTable("3", properties));
+    }
+
+    @ValueWithMethod(path = "/config/zkconf/ad_idfa_report.conf4")
+    public void adIdfaReportConfigHandle4(PropertiesConfiguration properties)
+    {
+        tableMinMap.put("4", initTable("4", properties));
+    }
+
+    @ValueWithMethod(path = "/config/zkconf/ad_idfa_report.conf5")
+    public void adIdfaReportConfigHandle5(PropertiesConfiguration properties)
+    {
+        tableMinMap.put("5", initTable("5", properties));
+    }
+
+    @ValueWithMethod(path = "/config/zkconf/ad_idfa_report.conf6")
+    public void adIdfaReportConfigHandle6(PropertiesConfiguration properties)
+    {
+        tableMinMap.put("6", initTable("6", properties));
+    }
+
+    @ValueWithMethod(path = "/config/zkconf/ad_idfa_report.conf7")
+    public void adIdfaReportConfigHandle7(PropertiesConfiguration properties)
+    {
+        tableMinMap.put("7", initTable("7", properties));
+    }
+
+    @ValueWithMethod(path = "/config/zkconf/ad_idfa_report.conf8")
+    public void adIdfaReportConfigHandle8(PropertiesConfiguration properties)
+    {
+        tableMinMap.put("8", initTable("8", properties));
+    }
+
+    @ValueWithMethod(path = "/config/zkconf/ad_idfa_report.conf9")
+    public void adIdfaReportConfigHandle9(PropertiesConfiguration properties)
+    {
+        tableMinMap.put("9", initTable("9", properties));
+    }
+
+
+    public Integer getMinValue(String tableIndex, Integer hour, Integer min)
+    {
+        Integer value = tableMinMap.get(tableIndex).get(hour, min);
+        if(null == value)
+        {
+            log.error("ad_idfa_report配置代码有误 defaultCount:{}", defaultCountMap.get(tableIndex));
+            return defaultCountMap.get(tableIndex);
+        }
+        else
+        {
+            return value;
+        }
+    }
+
+    private Table<Integer, Integer, Integer> initTable(String tableIndex, PropertiesConfiguration properties)
+    {
         Iterator<String> keys = properties.getKeys();
         String key;
         Map<Integer, Integer> tempHourMap = new HashMap<>();
@@ -34,7 +112,7 @@ public class AdIdfaReportConfigUtils {
             // 特殊化处理
             if("defaultCount".equals(key))
             {
-                defaultCount = Integer.valueOf(properties.getString(key));
+                defaultCountMap.put(tableIndex, Integer.valueOf(properties.getString(key)));
                 continue;
             }
 
@@ -59,31 +137,17 @@ public class AdIdfaReportConfigUtils {
         }
 
         // 填充缺失配置
-        fillTempMinTable(tempMinTable, tempHourMap);
+        fillTempMinTable(tableIndex, tempMinTable, tempHourMap);
 
-        minTable = ImmutableTable.copyOf(tempMinTable);
-        printTable(minTable);
+        printTable(tempMinTable);
+
+        return tempMinTable;
     }
-
-    public Integer getMinValue(Integer hour, Integer min)
-    {
-        Integer value = minTable.get(hour, min);
-        if(null == value)
-        {
-            log.error("ad_idfa_report配置代码有误 defaultCount:{}", defaultCount);
-            return defaultCount;
-        }
-        else
-        {
-            return value;
-        }
-    }
-
 
     /**
      * 打印table
      */
-    public void printTable(Table<Integer, Integer, Integer> table)
+    private void printTable(Table<Integer, Integer, Integer> table)
     {
         log.info("=============print table begin=============");
         StringBuilder sb = new StringBuilder();
@@ -105,7 +169,7 @@ public class AdIdfaReportConfigUtils {
     /**
      * 填充缺失配置
      */
-    private void fillTempMinTable(Table<Integer, Integer, Integer> tempMinTable, Map<Integer, Integer> tempHourMap)
+    private void fillTempMinTable(String tableIndex, Table<Integer, Integer, Integer> tempMinTable, Map<Integer, Integer> tempHourMap)
     {
         for (int h=0; h<24; h++)
         {
@@ -122,7 +186,7 @@ public class AdIdfaReportConfigUtils {
                     }
                     else
                     {
-                        value = defaultCount;
+                        value = defaultCountMap.get(tableIndex);
                     }
                     tempMinTable.put(h, m, value);
                 }

@@ -27,7 +27,7 @@ public class AdApplicationTests {
 	@Test
 	public void testConfig()
 	{
-		Integer minValue = adIdfaReportConfigUtils.getMinValue(1, 29);
+		Integer minValue = adIdfaReportConfigUtils.getMinValue("0", 1, 29);
 		log.info("==========config:{}", minValue);
 	}
 
