@@ -29,4 +29,9 @@ public class IdfaReportMqDTO
      */
     private String idfa;
 
+    /**
+     * 上报表下表
+     */
+    private String tableIndex;
+
 }

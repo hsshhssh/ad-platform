@@ -1,6 +1,6 @@
 package com.xqh.ad.utils.converter;
 
-import com.xqh.ad.utils.constant.ReportTypeEnum;
+import com.xqh.ad.utils.enums.ReportTypeEnum;
 import org.dozer.CustomConverter;
 
 /**

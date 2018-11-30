@@ -1,6 +1,6 @@
 package com.xqh.ad.entity.other;
 
-import com.xqh.ad.utils.constant.CallbackResponseEnum;
+import com.xqh.ad.utils.enums.CallbackResponseEnum;
 import lombok.Data;
 
 /**

@@ -86,17 +86,8 @@ public class AsyncUtils
 
 
         // 删除上报记录
-        adOdsIdfaReportMapper.deleteByPrimaryKey(idfaReportMqDTO.getId());
+        adOdsIdfaReportMapper.deleteById(idfaReportMqDTO.getTableIndex(), idfaReportMqDTO.getId());
 
-    }
-
-    /**
-     *  删除上报记录
-     */
-    @Async
-    public void deleteReportRecord(IdfaReportMqDTO idfaReportMqDTO)
-    {
-        adOdsIdfaReportMapper.selectByPrimaryKey(idfaReportMqDTO.getId());
     }
 
 }

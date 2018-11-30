@@ -1,6 +1,6 @@
 package com.xqh.ad.utils.converter;
 
-import com.xqh.ad.utils.constant.MonthSettlementSourceEnum;
+import com.xqh.ad.utils.enums.MonthSettlementSourceEnum;
 import org.dozer.CustomConverter;
 
 /**

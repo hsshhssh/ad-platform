@@ -31,9 +31,29 @@
             createTime
     </sql>
 
-  <select id="selectByRecordAndLimit" resultMap="BaseResultMap">
-      select id, app_media_id, ip, idfa, state, create_time from ad_ods_idfa_report
-      where state=#{record.state}
+    <select id="selectByRecordAndLimit" resultMap="BaseResultMap">
+        select id, app_media_id, ip, idfa, state, create_time
+        from ad_ods_idfa_report_${tableIndex}
+        where state=#{record.state}
       limit 0, #{count}
-  </select>
+    </select>
+    
+    <delete id="deleteById">
+        delete
+        from ad_ods_idfa_report_${tableIndex}
+        where id=#{id}
+    </delete>
+
+    <update id="updateByIds">
+        update ad_ods_idfa_report_${tableIndex}
+        set
+        <if test="record.state != null">
+            state = #{record.state}
+        </if>
+        where id in
+        <foreach collection="ids" open="(" close=")" separator="," item="item">
+            #{item}
+        </foreach>
+    </update>
+    
 </mapper>

@@ -1,4 +1,4 @@
-package com.xqh.ad.utils;
+package com.xqh.ad.utils.config;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.ImmutableList;
