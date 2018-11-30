@@ -9,6 +9,7 @@ import com.xqh.ad.tkmapper.entity.AdClick;
 import com.xqh.ad.tkmapper.entity.AdLeague;
 import com.xqh.ad.tkmapper.mapper.AdClickMapper;
 import com.xqh.ad.tkmapper.mapper.AdOdsIdfaReportMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
@@ -86,7 +87,11 @@ public class AsyncUtils
 
 
         // 删除上报记录
-        adOdsIdfaReportMapper.deleteById(idfaReportMqDTO.getTableIndex(), idfaReportMqDTO.getId());
+        if (StringUtils.isBlank(idfaReportMqDTO.getTableIndex())) {
+            adOdsIdfaReportMapper.deleteByPrimaryKey(idfaReportMqDTO.getId());
+        } else {
+            adOdsIdfaReportMapper.deleteById(idfaReportMqDTO.getTableIndex(), idfaReportMqDTO.getId());
+        }
 
     }
 

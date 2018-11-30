@@ -1,16 +1,12 @@
 package com.xqh.ad.utils.config;
 
 import com.google.common.base.Splitter;
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Table;
+import com.google.common.collect.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.hssh.common.zkconf.ValueWithMethod;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -24,6 +20,13 @@ public class AdIdfaReportConfigUtils {
     private ConcurrentMap<String, Table<Integer, Integer, Integer>> tableMinMap = Maps.newConcurrentMap();
     private ConcurrentMap<String, Integer> defaultCountMap = Maps.newConcurrentMap();
 
+    private Table<Integer, Integer, Integer> rawTable = HashBasedTable.create();
+
+    @ValueWithMethod(path = "/config/zkconf/ad_idfa_report.conf")
+    public void adIdfaReportConfigHandle(PropertiesConfiguration properties)
+    {
+        rawTable = initTable("-1", properties);
+    }
 
     @ValueWithMethod(path = "/config/zkconf/ad_idfa_report.conf0")
     public void adIdfaReportConfigHandle0(PropertiesConfiguration properties)
@@ -85,6 +88,20 @@ public class AdIdfaReportConfigUtils {
         tableMinMap.put("9", initTable("9", properties));
     }
 
+
+    public Integer getMinValue(Integer hour, Integer min)
+    {
+        Integer value = rawTable.get(hour, min);
+        if(null == value)
+        {
+            log.error("ad_idfa_report配置代码有误 defaultCount:{}", defaultCountMap.get("-1"));
+            return defaultCountMap.get("-1");
+        }
+        else
+        {
+            return value;
+        }
+    }
 
     public Integer getMinValue(String tableIndex, Integer hour, Integer min)
     {
