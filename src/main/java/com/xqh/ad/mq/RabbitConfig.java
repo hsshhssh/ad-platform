@@ -14,12 +14,12 @@ public class RabbitConfig
     /**
      * 蹭量消息队列
      */
-    public static final String FREELOAD_MQ = "freeload_mq";
+    public static final String FREELOAD_MQ = "freeload_mq_fl";
 
     /**
      * idfa上报消息队列
      */
-    public static final String IDFA_REPORT_MQ = "idfa_report_mq";
+    public static final String IDFA_REPORT_MQ = "idfa_report_mq_fl";
 
     @Bean
     public Queue testQueue() {
