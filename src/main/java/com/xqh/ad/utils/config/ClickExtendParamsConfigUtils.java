@@ -3,10 +3,12 @@ package com.xqh.ad.utils.config;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.hssh.common.zkconf.ValueWithMethod;
 import org.springframework.stereotype.Component;
 
+import java.io.ByteArrayInputStream;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -20,7 +22,9 @@ public class ClickExtendParamsConfigUtils
     private Map<Integer, String> params1Map = Maps.newConcurrentMap();
 
     @ValueWithMethod(path = "/config/zkconf/ad_click_extend_params1.conf")
-    public void ppMediaParamHandler(PropertiesConfiguration properties) {
+    public void ppMediaParamHandler(ByteArrayInputStream inputStream) throws ConfigurationException {
+        PropertiesConfiguration properties = new PropertiesConfiguration();
+        properties.load(inputStream, "utf-8");
         Map<Integer, String> tempMap = Maps.newHashMap();
         Iterator<String> keys = properties.getKeys();
         String key;

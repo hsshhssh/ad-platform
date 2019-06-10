@@ -5,12 +5,14 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.xqh.ad.entity.other.PPMediaParam;
+import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.hssh.common.zkconf.ValueWithMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.io.ByteArrayInputStream;
 import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.List;
@@ -27,10 +29,12 @@ public class PPMediaConfigUtils
     public static Map<Integer, PPMediaParam> paramMap = Maps.newHashMap();
 
     @ValueWithMethod(path = "/config/zkconf/ad_pp_media.conf")
-    public void ppMediaParamHandler(PropertiesConfiguration properties)
+    public void ppMediaParamHandler(ByteArrayInputStream inputStream)
     {
         try
         {
+            PropertiesConfiguration properties = new PropertiesConfiguration();
+            properties.load(inputStream, "utf-8");
             Map<Integer, PPMediaParam> tempMap = Maps.newHashMap();
             Iterator<String> keys = properties.getKeys();
             String key;
@@ -58,6 +62,8 @@ public class PPMediaConfigUtils
         } catch (IllegalAccessException e)
         {
             logger.error("pp助手配置异常 e:{}", Throwables.getStackTraceAsString(e));
+        } catch (ConfigurationException e) {
+            e.printStackTrace();
         }
     }
 

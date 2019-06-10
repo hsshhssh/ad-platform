@@ -3,10 +3,12 @@ package com.xqh.ad.utils.config;
 import com.google.common.base.Splitter;
 import com.google.common.collect.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.hssh.common.zkconf.ValueWithMethod;
 import org.springframework.stereotype.Component;
 
+import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -23,68 +25,79 @@ public class AdIdfaReportConfigUtils {
     private Table<Integer, Integer, Integer> rawTable = HashBasedTable.create();
 
     @ValueWithMethod(path = "/config/zkconf/ad_idfa_report.conf")
-    public void adIdfaReportConfigHandle(PropertiesConfiguration properties)
-    {
+    public void adIdfaReportConfigHandle(ByteArrayInputStream inputStream) throws ConfigurationException {
+        PropertiesConfiguration properties = new PropertiesConfiguration();
+        properties.load(inputStream, "utf-8");
         rawTable = initTable("-1", properties);
     }
 
     @ValueWithMethod(path = "/config/zkconf/ad_idfa_report.conf0")
-    public void adIdfaReportConfigHandle0(PropertiesConfiguration properties)
-    {
+    public void adIdfaReportConfigHandle0(ByteArrayInputStream inputStream) throws ConfigurationException {
+        PropertiesConfiguration properties = new PropertiesConfiguration();
+        properties.load(inputStream, "utf-8");
         tableMinMap.put("0", initTable("0", properties));
     }
 
     @ValueWithMethod(path = "/config/zkconf/ad_idfa_report.conf1")
-    public void adIdfaReportConfigHandle1(PropertiesConfiguration properties)
-    {
+    public void adIdfaReportConfigHandle1(ByteArrayInputStream inputStream) throws ConfigurationException {
+        PropertiesConfiguration properties = new PropertiesConfiguration();
+        properties.load(inputStream, "utf-8");
         tableMinMap.put("1", initTable("1", properties));
     }
 
     @ValueWithMethod(path = "/config/zkconf/ad_idfa_report.conf2")
-    public void adIdfaReportConfigHandle2(PropertiesConfiguration properties)
-    {
+    public void adIdfaReportConfigHandle2(ByteArrayInputStream inputStream) throws ConfigurationException {
+        PropertiesConfiguration properties = new PropertiesConfiguration();
+        properties.load(inputStream, "utf-8");
         tableMinMap.put("2", initTable("2", properties));
     }
 
     @ValueWithMethod(path = "/config/zkconf/ad_idfa_report.conf3")
-    public void adIdfaReportConfigHandle3(PropertiesConfiguration properties)
-    {
+    public void adIdfaReportConfigHandle3(ByteArrayInputStream inputStream) throws ConfigurationException {
+        PropertiesConfiguration properties = new PropertiesConfiguration();
+        properties.load(inputStream, "utf-8");
         tableMinMap.put("3", initTable("3", properties));
     }
 
     @ValueWithMethod(path = "/config/zkconf/ad_idfa_report.conf4")
-    public void adIdfaReportConfigHandle4(PropertiesConfiguration properties)
-    {
+    public void adIdfaReportConfigHandle4(ByteArrayInputStream inputStream) throws ConfigurationException {
+        PropertiesConfiguration properties = new PropertiesConfiguration();
+        properties.load(inputStream, "utf-8");
         tableMinMap.put("4", initTable("4", properties));
     }
 
     @ValueWithMethod(path = "/config/zkconf/ad_idfa_report.conf5")
-    public void adIdfaReportConfigHandle5(PropertiesConfiguration properties)
-    {
+    public void adIdfaReportConfigHandle5(ByteArrayInputStream inputStream) throws ConfigurationException {
+        PropertiesConfiguration properties = new PropertiesConfiguration();
+        properties.load(inputStream, "utf-8");
         tableMinMap.put("5", initTable("5", properties));
     }
 
     @ValueWithMethod(path = "/config/zkconf/ad_idfa_report.conf6")
-    public void adIdfaReportConfigHandle6(PropertiesConfiguration properties)
-    {
+    public void adIdfaReportConfigHandle6(ByteArrayInputStream inputStream) throws ConfigurationException {
+        PropertiesConfiguration properties = new PropertiesConfiguration();
+        properties.load(inputStream, "utf-8");
         tableMinMap.put("6", initTable("6", properties));
     }
 
     @ValueWithMethod(path = "/config/zkconf/ad_idfa_report.conf7")
-    public void adIdfaReportConfigHandle7(PropertiesConfiguration properties)
-    {
+    public void adIdfaReportConfigHandle7(ByteArrayInputStream inputStream) throws ConfigurationException {
+        PropertiesConfiguration properties = new PropertiesConfiguration();
+        properties.load(inputStream, "utf-8");
         tableMinMap.put("7", initTable("7", properties));
     }
 
     @ValueWithMethod(path = "/config/zkconf/ad_idfa_report.conf8")
-    public void adIdfaReportConfigHandle8(PropertiesConfiguration properties)
-    {
+    public void adIdfaReportConfigHandle8(ByteArrayInputStream inputStream) throws ConfigurationException {
+        PropertiesConfiguration properties = new PropertiesConfiguration();
+        properties.load(inputStream, "utf-8");
         tableMinMap.put("8", initTable("8", properties));
     }
 
     @ValueWithMethod(path = "/config/zkconf/ad_idfa_report.conf9")
-    public void adIdfaReportConfigHandle9(PropertiesConfiguration properties)
-    {
+    public void adIdfaReportConfigHandle9(ByteArrayInputStream inputStream) throws ConfigurationException {
+        PropertiesConfiguration properties = new PropertiesConfiguration();
+        properties.load(inputStream, "utf-8");
         tableMinMap.put("9", initTable("9", properties));
     }
 

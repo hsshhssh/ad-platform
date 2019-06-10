@@ -5,10 +5,12 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.xqh.ad.entity.vo.AdTestIdfaVO;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.hssh.common.zkconf.ValueWithMethod;
 import org.springframework.stereotype.Component;
 
+import java.io.ByteArrayInputStream;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,8 +25,9 @@ public class TestIdfaConfigUtils
     private static ImmutableList<AdTestIdfaVO> TEST_IDFA_LIST;
 
     @ValueWithMethod(path = "/config/zkconf/ad_test_idfa_conf")
-    public void adTestIdfaHandler(PropertiesConfiguration properties)
-    {
+    public void adTestIdfaHandler(ByteArrayInputStream inputStream) throws ConfigurationException {
+        PropertiesConfiguration properties = new PropertiesConfiguration();
+        properties.load(inputStream, "utf-8");
         List<AdTestIdfaVO> tempList = Lists.newArrayList();
         Iterator<String> keys = properties.getKeys();
         String key;
